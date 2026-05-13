@@ -27,7 +27,7 @@ def parse_links(soup: BeautifulSoup) -> list[CSSFile]:
 
     # Get all referenced stylesheets
     for link in soup.find_all("link", rel="stylesheet"):
-        css_files.append(link["href"])
+        css_files.append(str(link["href"]))
         link.decompose()
     
     styles = []
@@ -42,7 +42,7 @@ def parse_scripts(soup: BeautifulSoup) -> list[JSFile]:
     js_files: list[str] = []
 
     for script in soup.find_all("script"):
-        src = script["src"]
+        src = str(script["src"])
         if src:
             # Make sure src is reference to file
             if not (src.startswith("http") or src.startswith("//")):
@@ -72,7 +72,9 @@ def add_css(soup: BeautifulSoup) -> None:
 
         style_el.string += full
 
-    soup.find("head").append(style_el)
+    head = soup.find("head")
+    if head is not None:
+        head.append(style_el)
 
 def add_scripts(soup: BeautifulSoup) -> None:
     scripts: list[JSFile] = parse_scripts(soup)
@@ -87,7 +89,10 @@ def add_scripts(soup: BeautifulSoup) -> None:
 
         script_tag.string = full
 
-        soup.find("body").append(script_tag)
+        body = soup.find("body")
+
+        if body is not None:
+            body.append(script_tag)
 
 def main() -> None:
     html = read_file("index.html")
