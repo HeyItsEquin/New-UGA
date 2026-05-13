@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            color: rgb(255, 255, 255);
+            align-items: center;
+            text-align: center;
+            font-family: "Audiowide", sans-serif;
+            background-color: rgb(0, 0, 0);
+            overflow: hidden;
+        }
+
+        label {
+            margin-top: 1px;
+            margin-left: 10px;
+            margin-right: 10px;
+            font-size: 1.17vw;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.596);
+            margin-bottom: 1px;
+        }
+
+        p {
+            margin-top: 1px;
+            margin-left: 10px;
+            margin-right: 10px;
+            font-size: 1vw;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.596);
+            margin-bottom: 1px;
+        }
+
+        .error {
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 998;
+            border: none;
+            top: 0%;
+            border: none;
+            box-shadow: none;
+        }
+
+        h2 {
+            font-size: 1.7vw;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.596);
+        }
+
+        h3 {
+            font-size: 1.12vw;
+            margin-bottom: 1px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.596);
+        }
+
+        h1 {
+            font-size: 6vw;
+            letter-spacing: 2px;
+            word-spacing: 0.6px;
+            font-weight: 1000;
+            text-decoration: none;
+            font-variant: normal;
+            text-transform: none;
+            color: rgb(21, 255, 0);
+            text-shadow:
+                0 0 20px rgba(21, 255, 0, 0.596),
+                0 0 30px rgba(0, 0, 0, 0.596);
+            margin-bottom: 1px;
+        }
+
+        div {
+            position: absolute;
+            border: 1.5px;
+            border-style: solid;
+            border-color: rgb(16, 184, 1);
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            corner-shape: bevel;
+            box-shadow: inset 0 0 20px 5px rgba(21, 255, 0, 0.3);
+            transition: top 0.4s ease-in-out;
+            top: -90%;
+        }
+
+        div.open {
+            top: 10%;
+        }
+
+        div p {
+            color: rgb(21, 255, 0);
+            text-shadow: 0 0 10px rgba(21, 255, 0, 0.596);
+        }
+
+        div h2 {
+            color: rgb(21, 255, 0);
+            text-shadow: 0 0 10px rgba(21, 255, 0, 0.596);
+        }
+
+        div h3 {
+            color: rgb(18, 209, 0);
+            text-shadow: 0 0 10px rgba(21, 255, 0, 0.596);
+        }
+
+        div.invis {
+            border: none;
+            box-shadow: none;
+            background-color: rgba(0, 0, 0, 0);
+        }
+
+        button {
+            color: rgb(255, 255, 255);
+            border: 1px;
+            border-style: solid;
+            background-color: rgba(0, 0, 0, 0);
+            font-size: 1vw;
+            font-weight: 600;
+            position: absolute;
+            font-family: "Audiowide", sans-serif;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.596);
+        }
+
+        button.main {
+            width: 15%;
+            height: 10%;
+            font-size: 1.1vw;
+            border-color: rgb(16, 184, 1);
+            color: rgb(21, 255, 0);
+            text-shadow: 0 0 10px rgba(21, 255, 0, 0.596);
+            box-shadow: inset 0 0 10px 3px rgba(21, 255, 0, 0.3);
+        }
+
+        esc {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 1px;
+            border-color: rgb(30, 30, 30);
+            border-style: solid;
+            position: absolute;
+            z-index: 1000;
+            top: 0px;
+            height: 2.6%;
+            width: 12%;
+            left: 50%;
+            transform: translate(-50%, -70%);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            transition: transform 0.1s ease-out;
+            display: none;
+            corner-shape: bevel;
+        }
+
+        esc p {
+            text-shadow: none;
+            color: rgb(21, 255, 0);
+            transform: translate(0px, -15%);
+            letter-spacing: 1px;
+            font-weight: 550;
+            font-size: 1vw;
+        }
+
+        esc:hover {
+            transform: translate(-50%, 0px);
+        }
+
+        tab {
+            position: absolute;
+            border: 1.5px;
+            border-style: solid;
+            background-color: rgba(0, 0, 0, 0);
+            border-color: rgb(16, 184, 1);
+            box-shadow: inset 0 0 20px 5px rgba(21, 255, 0, 0.3);
+            bottom: -2.2%;
+            height: 5%;
+            transition: bottom 0.1s ease-out;
+        }
+
+        tab p {
+            color: rgb(92, 255, 78);
+            text-shadow: 0 0 10px rgba(21, 255, 0, 0.596);
+            font-size: 1.1vw;
+        }
+
+        tab:hover {
+            bottom: -1%;
+        }
+
+        tab.open {
+            bottom: -1%;
+        }
+
+        iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 99.6%;
+            height: 99%;
+            border: none;
+            z-index: 999;
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition: all 0.4s ease-in-out;
+        }
+
+        .hidden {
+            opacity: 0;
+            transform: translate(-50%, -150%);
+            pointer-events: none;
+        }
+
+        input[type="checkbox"] {
+            accent-color: rgb(51, 51, 51);
+            border: 1px;
+            border-color: rgba(255, 255, 255, 0.7);
+        }
+
+        textarea {
+            background-color: rgba(73, 73, 73, 0.307);
+            border-color: rgb(16, 184, 1);
+            color: white;
+            font-size: 1.17vw;
+            font-family: "Audiowide", sans-serif;
+            text-align: center;
+        }
+
+        form p {
+            color: rgb(153, 153, 153);
+            text-shadow: 0 0 10px rgba(143, 143, 143, 0.596);
+        }
+    </style>
+    <div id="particles-js" style="top: 0%; width: 100%; left: 0%; height: 100%" class="invis" onclick="closetab()">
+    </div>
+    <br />
+    <p id="time"></p>
+    <div style="top: 41%; left: 50%; transform: translate(-50%, -50%)" class="invis">
+        <h1>UGA</h1>
+        <p class="gtext">new update every monday</p>
+    </div>
+
+    <!--TAB 1-->
+    <tab style="left: 8.5%; width: 15%" onclick="opentab('ga')" id="ga">
+        <p>Gąmes / Pröxies</p>
+    </tab>
+    <div style="width: 80%; height: 80%; left: 10%" id="ga_b">
+        <h2>Gąmes / Pröxies</h2>
+        <button style="left: 7%; top: 20%" onclick="selenite()" class="main">
+            Selenite
+        </button>
+        <button style="left: 27%; top: 20%" onclick="prism()" class="main">
+            Vapor (Prism)
+        </button>
+        <svg height="80%" width="100">
+            <line x1="50%" y1="2%" x2="50%" y2="95%"
+                style="stroke: rgb(16, 184, 1); stroke-width: 2; position: absolute" />
+        </svg>
+        <button style="right: 27%; top: 20%" onclick="interstellar()" class="main">
+            Interstellar
+        </button>
+        <button style="right: 7%; top: 20%" onclick="frogie()" class="main">
+            Frogie's Arcade
+        </button>
+        <p>Broken? Try something else or check out Downloads.</p>
+    </div>
+
+    <!--TAB 2-->
+    <tab style="left: 25.5%; width: 15%" onclick="opentab('do')" id="do">
+        <p>Downloads / Guides</p>
+    </tab>
+    <div style="width: 80%; height: 80%; left: 10%" id="do_b">
+        <div class="invis" style="top: 5%; left: 5%; width: 40%; height: 90%">
+            <h2 class="gtext">Downloads</h2>
+            <button class="main" style="position: relative; width: 50%"
+                onclick="downloadfile('math/singlefile.html', 'singlefile.html')">
+                gn-math
+            </button>
+            <br />
+            <br />
+            <br />
+            <button class="main" style="width: 50%; position: relative" onclick="downloadfile('BSS.zip', 'BSS.zip')">
+                Bee Swarm Simulator
+            </button>
+            <p>(Unzip and run index.html)</p>
+        </div>
+        <div class="invis" style="top: 5%; left: 55%; width: 40%; height: 90%">
+            <h2 class="gtext">Guides</h2>
+            <p>(Probably) coming soon.</p>
+        </div>
+    </div>
+
+    <!--TAB 3-->
+    <tab style="left: 42.5%; width: 15%" onclick="opentab('cl')" id="cl">
+        <p>Tools</p>
+    </tab>
+    <div style="width: 30%; height: 80%; left: 35%" id="cl_b">
+        <p>All we have is Cloaxer rn.</p>
+        <h2>Cloaxer</h2>
+        <p style="margin-right: 10%; margin-left: 10%">
+            Cloaxer is for about:blank cloaking tabs. This makes them harder to be
+            dyknow(ed) and blocked. It works on almost everything but products from
+            big companies (Google, Microsoft, etc?) <br />
+            <br />
+            Instructions: Press the "prompt" button below and put in your link
+            (without https:// before it.)
+        </p>
+        <br />
+        <button style="
+          width: 50%;
+          height: 10%;
+          transform: translate(-50%, 0px);
+          bottom: 5%;
+        " class="main" onclick="opencloak('https://' + prompt('URL:'))">
+            Prompt
+        </button>
+    </div>
+
+    <!--TAB 4-->
+    <tab style="left: 59.5%; width: 15%" onclick="opentab('in')" id="in">
+        <p>Info</p>
+    </tab>
+    <div style="width: 80%; height: 80%; left: 10%" id="in_b">
+        <h2>Info</h2>
+        <h3>v1.1 - 5/11/2026</h3>
+        <h3>Made by https://github.com/ddddd-dbase (UGA dev 2)</h3>
+        <h3>Email: loverofelpotatos@gmail.com</h3>
+        <h3>No Ai used :D</h3>
+        <br />
+        <h2>Changelog</h2>
+        <p>Link fixes will not be included.</p>
+        <textarea readonly style="width: 80%; height: 40%">
+v1.1 - 5/11/2026
+- Particles.js background + toggle for it
+- A bit more info in random places
+- Bee Swarm Simulator downloadable
+- Renamed "Cloaxer" tab to "Tools"
+- You can now click outside tabs to close them (not just clicking on the tab again)
+- Time display
+- Hide home button toggle
+- Moved settings and suggestions into its own tab
+- Minor design changes
+
+v1.0.1 - 5/5/2026
+- Added more info in various places
+- Fixed home button
+
+v1.0 - 5/4/2026
+- Completely revamped UI
+- Update warning added
+- This changelog added
+- Fixed nothing
+
+v0.2 - 4/27/2026
+- Coming soon added
+- Guides (coming soon) added
+- Splash texts added
+- Downloads added
+- Fixed font size on smaller screens
+
+v0.1 - 4/20/2026
+- First version :O
+      </textarea>
+    </div>
+
+    <!--TAB 5-->
+    <tab style="left: 76.5%; width: 15%" onclick="opentab('se')" id="se">
+        <p style="letter-spacing: -3%">Settings / Suggestions</p>
+    </tab>
+    <div style="width: 80%; height: 80%; left: 10%" id="se_b">
+        <h2>Settings</h2>
+        <form>
+            <label>Auto self-cloak on launch</label>
+            <input type="checkbox" id="self-cloak" style="display: inline-flex" />
+            <p>(requires popups to be enabled)</p>
+            <br />
+            <label>Replace original tab</label>
+            <input type="checkbox" id="replacemain" class="reqcloak" />
+            <p>
+                (Do note that Cloaked links will not open in a new tab in cloaked
+                form.)
+            </p>
+            <br />
+            <label>Always show home button</label>
+            <input type="checkbox" id="hometoggle" />
+            <p>Reload to fix if broken.</p>
+            <br />
+            <label>Dynamic background (particles)</label>
+            <input type="checkbox" id="particletoggle" checked />
+            <br />
+            <br />
+            <br />
+            <button type="button" onclick="window.location.reload()"
+                style="width: 10%; height: 8%; transform: translate(-50%, -10%)">
+                Reload
+            </button>
+            <br />
+            <br />
+            <br />
+            <br />
+            <h2>Suggestions</h2>
+            <p>Got suggestions for UGA? Fill out the form below.</p>
+            <br />
+            <button type="button" style="transform: translate(-50%, -10%); width: 10%; height: 8%"
+                onclick="openIFrame('https://forms.office.com/r/Q1b91AwsJ1')">
+                Open Form
+            </button>
+        </form>
+    </div>
+
+    <!--Popup-->
+    <div id="popup" style="
+        top: 25%;
+        height: 50%;
+        width: 30%;
+        left: 35%;
+        background-color: rgba(0, 0, 0, 0.9);
+      ">
+        <h2>Time for an update?</h2>
+        <h3 style="color: rgb(21, 255, 0)">Instructions:</h3>
+        <br />
+        <p>
+            Press
+            <i style="color: rgb(132, 255, 121)">Ctrl + Shift + R<br /></i>(Cmd +
+            Shift + R for Mac) <br /><br />
+            Or open developer tools and empty cache.
+        </p>
+        <button class="main" style="bottom: 5%; width: 50%; transform: translate(-50%, 0px)" onclick="closepopup()">
+            Ignore
+        </button>
+    </div>
+
+    <!--Escape button-->
+    <esc id="escbutton">
+        <p>Home</p>
+    </esc>
+</body>
+<script src="https://cdn.jsdelivr.net/gh/HeyItsEquin/New-UGA@main/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/HeyItsEquin/New-UGA@main/app.js"></script>
+<script>
+    /*
+    https://cdn.jsdelivr.net/gh/ddddd-dbase/New-UGA@main/script.js
+    https://cdn.jsdelivr.net/gh/ddddd-dbase/uga@main/script.js
+    https://cdn.jsdelivr.net/gh/ddddd-dbase/potatopcs@main/script.js
+    */
+
+    function selenite() {
+        openIFrame("https://mail.adriapartners.net");
+    }
+    function prism() {
+        openIFrame("https://schoolclassroomcanvacanvacodecom.7879.22web.org/");
+    }
+    function interstellar() {
+        openIFrame("https://potato.wwe.ddnss.de");
+    }
+    function frogie() {
+        openIFrame("https://mshjvxae.1vib36z.ddnss.de/");
+    }
+
+    const popup = document.getElementById("popup");
+    if (!(Date.now() > 1779177600000)) {
+        popup.remove();
+    }
+    let displaydate = new Date().toLocaleString();
+    const timetext = document.getElementById("time");
+    timetext.innerText = displaydate;
+    setInterval(() => {
+        displaydate = new Date().toLocaleString();
+        timetext.innerText = displaydate;
+    }, 200);
+    function closepopup() {
+        popup.remove();
+    }
+
+    let currenttab = "none";
+    function opentab(tab) {
+        if (currenttab != "none") {
+            closetab();
+        }
+        if (currenttab != tab) {
+            currenttab = tab;
+            const tabTemp = document.getElementById(currenttab);
+            tabTemp.classList.add("open");
+            const tabToOpen = document.getElementById(tab + "_b");
+            tabToOpen.classList.add("open");
+        } else {
+            currenttab = "none";
+        }
+    }
+    function closetab() {
+        if (currenttab != "none") {
+            const tabTemp = document.getElementById(currenttab);
+            tabTemp.classList.remove("open");
+            const tabtoclose = document.getElementById(currenttab + "_b");
+            tabtoclose.classList.remove("open");
+        }
+    }
+
+    const removeme = document.getElementById("removeme");
+    setTimeout(() => {
+        removeme.remove();
+    }, 100);
+    const escbutton = document.getElementById("escbutton");
+    function opencloak(url) {
+        if (URL.canParse(url) && url != "https://null") {
+            let inFrame;
+            try {
+                inFrame = window !== top;
+            } catch (e) {
+                inFrame = true;
+            }
+            if (!localStorage.getItem("ab")) localStorage.setItem("ab", true);
+            if (!inFrame && localStorage.getItem("ab") === "true") {
+                const popup = open("about:blank", "_blank");
+                setTimeout(() => {
+                    if (!popup || popup.closed) {
+                        alert(
+                            "Popups are required for UGA self-cloaking. Please enable them :)",
+                        );
+                    } else {
+                        const doc = popup.document;
+                        const iframe = doc.createElement("iframe");
+                        const style = iframe.style;
+                        const link = doc.createElement("link");
+                        doc.title = "My Drive - Google Drive";
+                        link.rel = "icon";
+                        link.href =
+                            "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png";
+
+                        //const urlParams = new URLSearchParams(window.location.search);
+                        //const targetUrl = urlParams.get("url");
+
+                        const siteToLoad = url ? decodeURIComponent(url) : location.href;
+
+                        iframe.src = siteToLoad;
+                        style.position = "fixed";
+                        style.top = style.bottom = style.left = style.right = 0;
+                        style.border = style.outline = "none";
+                        style.width = style.height = "100%";
+                        doc.head.appendChild(link);
+                        doc.body.appendChild(iframe);
+
+                        if (localStorage.getItem("replacecloak") == "true") {
+                            location.replace("https://google.com");
+                        }
+
+                        const script = doc.createElement("script");
+                        script.textContent = `
+                window.onbeforeunload = function (event) {
+                  const confirmationMessage = 'Leave Site?';
+              (event || window.event).returnValue = confirmationMessage;
+              return confirmationMessage;
+            };
+          `;
+                        doc.head.appendChild(script);
+                    }
+                }, 1000);
+            } else {
+                openIFrame(url);
+            }
+        } else {
+            alert("Improper URL. (ex: example.com )");
+        }
+    }
+    function openIFrame(url) {
+        window.scrollTo(0, 0);
+        const iframe = document.createElement("iframe");
+        iframe.src = url;
+        iframe.id = "delete";
+        document.body.appendChild(iframe);
+        escbutton.style.display = "block";
+        const screen = document.createElement("div");
+        const text = document.createElement("h2");
+        text.textContent = "Loading...";
+        screen.id = "error";
+        screen.classList.add("error");
+        console.log(screen);
+        document.body.appendChild(screen);
+        screen.appendChild(text);
+    }
+    const replacemain = document.getElementById("replacemain");
+    const selfcloak = document.getElementById("self-cloak");
+    if (localStorage.getItem("cloak") == "true") {
+        let inFrame;
+        try {
+            inFrame = window !== top;
+        } catch (e) {
+            inFrame = true;
+        }
+        selfcloak.checked = true;
+        if (!inFrame) {
+            opencloak(window.location.href);
+        }
+    }
+    const particletoggle = document.getElementById("particletoggle");
+    const particlesdiv = document.getElementById("particles-js");
+    particletoggle.addEventListener("change", (event) => {
+        if (event.currentTarget.checked) {
+            particlesdiv.style.display = "block";
+            localStorage.setItem("particles", "true");
+        } else {
+            particlesdiv.style.display = "none";
+            localStorage.setItem("particles", "false");
+        }
+    });
+    if (localStorage.getItem("particles") == "false") {
+        particlesdiv.style.display = "none";
+        particletoggle.checked = false;
+    }
+    if (localStorage.getItem("replacecloak") == "true") {
+        replacemain.checked = true;
+    }
+    selfcloak.addEventListener("change", (event) => {
+        if (event.currentTarget.checked) {
+            localStorage.setItem("cloak", "true");
+        } else {
+            localStorage.setItem("cloak", "false");
+        }
+    });
+    replacemain.addEventListener("change", (event) => {
+        if (event.currentTarget.checked) {
+            localStorage.setItem("replacecloak", "true");
+        } else {
+            localStorage.setItem("replacecloak", "false");
+        }
+    });
+    escbutton.addEventListener("click", () => {
+        const todelete = document.getElementById("delete");
+        const screentodelete = document.getElementById("error");
+        if (todelete) {
+            screentodelete.remove();
+            todelete.classList.add("hidden");
+            setTimeout(() => {
+                todelete.remove();
+            }, 400);
+        }
+        escbutton.style.display = "none";
+    });
+    const esctoggle = document.getElementById("hometoggle");
+    esctoggle.addEventListener("change", (event) => {
+        if (event.currentTarget.checked) {
+            escbutton.style.transform = "translate(-50%,0px)";
+            localStorage.setItem("showesc", "true");
+        } else {
+            escbutton.style.transform = "translate(-50%,-70%)";
+            localStorage.setItem("showesc", "false");
+        }
+    });
+    if (localStorage.getItem("showesc") == "true") {
+        escbutton.style.transform = "translate(-50%,0px)";
+        esctoggle.checked = true;
+    }
+    window.addEventListener("beforeunload", (e) => {
+        e.preventDefault();
+        e.returnValue = "";
+    });
+    async function downloadfile(path, name) {
+        const url =
+            "https://cdn.jsdelivr.net/gh/ddddd-dbase/New-UGA@main/" + path;
+        console.log(url);
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = name;
+        link.click();
+    }
+</script>
+</html>
