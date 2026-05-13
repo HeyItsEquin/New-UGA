@@ -1,17 +1,13 @@
 from bs4 import BeautifulSoup
 from bs4.formatter import HTMLFormatter
+from typing import Tuple, TypeAlias
 
 INDENT_LEVEL=4
 
-class CSSFile:
-    def __init__(self, fname: str, contents: str) -> None:
-        self.file_name = fname
-        self.contents = contents
+File: TypeAlias = Tuple[str, str]
 
-class JSFile:
-    def __init__(self, fname: str, contents: str) -> None:
-        self.file_name = fname
-        self.contents = contents
+def is_uri(s: str) -> bool:
+    return (s is not None) and (s.startswith("http") or s.startswith("//"))
 
 def read_file(fp: str) -> str:
     with open(fp, "r") as f:
@@ -22,38 +18,56 @@ def write_output(out: str, soup: BeautifulSoup) -> None:
         fmt = HTMLFormatter(indent=INDENT_LEVEL)
         f.write(soup.prettify(formatter=fmt))
 
-def parse_links(soup: BeautifulSoup) -> list[CSSFile]:
+def parse_links(soup: BeautifulSoup) -> list[File]:
     css_files: list[str] = []
 
     # Get all referenced stylesheets
     for link in soup.find_all("link", rel="stylesheet"):
-        css_files.append(str(link["href"]))
-        link.decompose()
+        href = str(link["href"])
+        if href:
+            # Do not try to embed remote stylesheets
+            if not is_uri(href):
+                css_files.append(href)
+                link.decompose()
     
     styles = []
 
     for file in css_files:
-        contents = read_file(file)
-        styles.append(CSSFile(file, contents))
+        try:
+            contents = read_file(file)
+            styles.append((file, contents))
+        except FileNotFoundError:
+            print(f"CSS File not found: {file} (does it resolve in your HTML?)")
+        except IsADirectoryError:
+            print(f"Found <link> reference to directory: {file}")
+        except Exception as e:
+            print(f"Failed to read CSS file: {file} - {e}")
 
     return styles
 
-def parse_scripts(soup: BeautifulSoup) -> list[JSFile]:
+def parse_scripts(soup: BeautifulSoup) -> list[File]:
     js_files: list[str] = []
 
     for script in soup.find_all("script"):
         src = str(script["src"])
         if src:
             # Make sure src is reference to file
-            if not (src.startswith("http") or src.startswith("//")):
+            if not is_uri(src):
                 js_files.append(src)
                 script.decompose()
 
     scripts = []
 
     for file in js_files:
-        contents = read_file(file)
-        scripts.append(JSFile(file, contents))
+        try:
+            contents = read_file(file)
+            scripts.append((file, contents))
+        except FileNotFoundError:
+            print(f"Script file not found: {file} (does it resolve in your HTML?)")
+        except IsADirectoryError:
+            print(f"Found <script> reference to directory: {file}")
+        except Exception as e:
+            print(f"Failed to read script file: {file} - {e}")
 
     return scripts
 
@@ -66,8 +80,8 @@ def add_css(soup: BeautifulSoup) -> None:
     for doc in docs:
         # Indentation lvl for style tag is usually 3
         indent = (" "*INDENT_LEVEL)*3
-        comment = f"/* {doc.file_name} */"
-        contents = doc.contents.replace("\n", f"\n{indent}")
+        comment = f"/* {doc[0]} */"
+        contents = doc[1].replace("\n", f"\n{indent}")
         full = f"\n{indent}{comment}\n\n{indent}{contents}\n\n"
 
         style_el.string += full
@@ -77,14 +91,14 @@ def add_css(soup: BeautifulSoup) -> None:
         head.append(style_el)
 
 def add_scripts(soup: BeautifulSoup) -> None:
-    scripts: list[JSFile] = parse_scripts(soup)
+    scripts: list[File] = parse_scripts(soup)
 
     for script in scripts:
         script_tag = soup.new_tag("script")
 
         indent = (" "*INDENT_LEVEL)*3
-        comment = f"// {script.file_name.removeprefix("./")}"
-        contents = script.contents.replace("\n", f"\n{indent}")
+        comment = f"// {script[0].removeprefix("./")}"
+        contents = script[1].replace("\n", f"\n{indent}")
         full = f"\n{indent}{comment}\n\n{indent}{contents}"
 
         script_tag.string = full
