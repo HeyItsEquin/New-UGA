@@ -1,5 +1,22 @@
-html {
-    height: 100%;
+.corner-bevel-18 {
+    clip-path: polygon(
+        18px 0%,
+        100% 0%,
+        100% calc(100% - 18px),
+        calc(100% - 18px) 100%,
+        0% 100%,
+        0% 18px
+    );
+}
+.bottom-corner-bevel-8 {
+    clip-path: polygon(
+        0% 0%,
+        100% 0%,
+        100% calc(100% - 8px),
+        calc(100% - 8px) 100%,
+        8px 100%,
+        0% calc(100% - 8px)
+    );
 }
 
 body {
@@ -40,18 +57,11 @@ p {
     box-shadow: none;
 }
 
-h2 {
-    font-size: 1.7vw;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.596);
+#main-label {
+    position: absolute;
 }
 
-h3 {
-    font-size: 1.12vw;
-    margin-bottom: 1px;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.596);
-}
-
-h1 {
+#main-label h1 {
     font-size: 6vw;
     letter-spacing: 2px;
     word-spacing: 0.6px;
@@ -59,52 +69,56 @@ h1 {
     text-decoration: none;
     font-variant: normal;
     text-transform: none;
-    color: rgb(21, 255, 0);
+    color: var(--font-color-primary);
     text-shadow:
-        0 0 20px rgba(21, 255, 0, 0.596),
-        0 0 30px rgba(0, 0, 0, 0.596);
+        0 0 20px var(--text-shadow-primary),
+        0 0 30px var(--text-shadow-dark);
     margin-bottom: 1px;
 }
 
-div {
-    position: absolute;
-    border: 1.5px;
-    border-style: solid;
-    border-color: rgb(16, 184, 1);
-    background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 20px;
-    corner-shape: bevel;
-    box-shadow: inset 0 0 20px 5px rgba(21, 255, 0, 0.3);
-    transition: top 0.4s ease-in-out;
-    top: -90%;
+#main-label p {
+    color: var(--font-color-primary);
+    text-shadow: 0 0 10px var(--text-shadow-primary);
 }
 
-div.open {
+.tab-window {
+    position: absolute;
+    background-color: var(--background-color-primary);
+    transition: top 0.4s ease-in-out;
+    top: -90%;
+    display: none;
+    border-radius: 20px;
+    
+    /* corner-shape not supported on all browsers */
+    corner-shape: bevel;
+}
+
+.tab-window.open {
+    display: block;
     top: 10%;
 }
 
-div p {
-    color: rgb(21, 255, 0);
-    text-shadow: 0 0 10px rgba(21, 255, 0, 0.596);
+.tab-window p, .tab-window h2, .tab-window-h3 {
+    color: var(--font-color-primary);
+    text-shadow: 0 0 10px var(--text-shadow-primary);
 }
 
-div h2 {
-    color: rgb(21, 255, 0);
-    text-shadow: 0 0 10px rgba(21, 255, 0, 0.596);
+.tab-window h3 {
+    color: var(--font-color-tertiary);
 }
 
-div h3 {
-    color: rgb(18, 209, 0);
-    text-shadow: 0 0 10px rgba(21, 255, 0, 0.596);
-}
-
-div.invis {
+.no-highlight {
     border: none;
     box-shadow: none;
-    background-color: rgba(0, 0, 0, 0);
+}
+
+.highlight {
+    border: 1.5px solid var(--highlight-border-primary);
+    box-shadow: inset 0 0 20px 5px var(--highlight-shadow-primary);
 }
 
 button {
+    cursor: pointer;
     color: rgb(255, 255, 255);
     border: 1px;
     border-style: solid;
@@ -126,7 +140,7 @@ button.main {
     box-shadow: inset 0 0 10px 3px rgba(21, 255, 0, 0.3);
 }
 
-esc {
+.esc-btn {
     background-color: rgba(0, 0, 0, 0.9);
     border: 1px;
     border-color: rgb(30, 30, 30);
@@ -138,6 +152,7 @@ esc {
     width: 12%;
     left: 50%;
     transform: translate(-50%, -70%);
+    
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     transition: transform 0.1s ease-out;
@@ -145,7 +160,7 @@ esc {
     corner-shape: bevel;
 }
 
-esc p {
+.esc-btn p {
     text-shadow: none;
     color: rgb(21, 255, 0);
     transform: translate(0px, -15%);
@@ -154,11 +169,11 @@ esc p {
     font-size: 1vw;
 }
 
-esc:hover {
+.esc-btn:hover {
     transform: translate(-50%, 0px);
 }
 
-tab {
+.tab {
     position: absolute;
     border: 1.5px;
     border-style: solid;
@@ -170,17 +185,18 @@ tab {
     transition: bottom 0.1s ease-out;
 }
 
-tab p {
+.tab p {
     color: rgb(92, 255, 78);
     text-shadow: 0 0 10px rgba(21, 255, 0, 0.596);
     font-size: 1.1vw;
 }
 
-tab:hover {
+.tab:hover {
+    cursor: pointer;
     bottom: -1%;
 }
 
-tab.open {
+.tab.open {
     bottom: -1%;
 }
 

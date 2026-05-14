@@ -1,33 +1,32 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="styles/index.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles/index.css">
+    <link rel="stylesheet" type="text/css" href="styles/themes/default.css">
 </head>
-
 <body>
-    <div id="particles-js" style="top: 0%; width: 100%; left: 0%; height: 100%" class="invis" onclick="closetab()">
+    <div id="particles-js" style="top: 0%; width: 100%; left: 0%; height: 100%" class="no-highlight" onclick="closetab()">
     </div>
-    <br />
+    <br>
     <p id="time"></p>
-    <div style="top: 41%; left: 50%; transform: translate(-50%, -50%)" class="invis">
+    <div id="main-label" class="no-highlight" style="top: 41%; left: 50%; transform: translate(-50%, -50%)">
         <h1>UGA</h1>
-        <p class="gtext">new update every monday</p>
+        <p>new update every monday</p>
     </div>
 
     <!--TAB 1-->
-    <tab style="left: 8.5%; width: 15%" onclick="opentab('ga')" id="ga">
+    <div id="ga" class="tab highlight" style="left: 8.5%; width: 15%" onclick="opentab('ga')">
         <p>Gąmes / Pröxies</p>
-    </tab>
-    <div style="width: 80%; height: 80%; left: 10%" id="ga_b">
+    </div>
+    <div id="ga_b" class="tab-window highlight" style="width: 80%; height: 80%; left: 10%">
         <h2>Gąmes / Pröxies</h2>
         <button style="left: 7%; top: 20%" onclick="selenite()" class="main">
             Selenite
@@ -49,35 +48,35 @@
     </div>
 
     <!--TAB 2-->
-    <tab style="left: 25.5%; width: 15%" onclick="opentab('do')" id="do">
+    <div id="do" class="tab highlight" style="left: 25.5%; width: 15%" onclick="opentab('do')">
         <p>Downloads / Guides</p>
-    </tab>
-    <div style="width: 80%; height: 80%; left: 10%" id="do_b">
-        <div class="invis" style="top: 5%; left: 5%; width: 40%; height: 90%">
-            <h2 class="gtext">Downloads</h2>
+    </div>
+    <div id="do_b" class="tab-window highlight" style="width: 80%; height: 80%; left: 10%">
+        <div class="no-highlight" style="position: absolute; top: 5%; left: 5%; width: 40%; height: 90%">
+            <h2>Downloads</h2>
             <button class="main" style="position: relative; width: 50%"
                 onclick="downloadfile('math/singlefile.html', 'singlefile.html')">
                 gn-math
             </button>
-            <br />
-            <br />
-            <br />
+            <br>
+            <br>
+            <br>
             <button class="main" style="width: 50%; position: relative" onclick="downloadfile('BSS.zip', 'BSS.zip')">
                 Bee Swarm Simulator
             </button>
             <p>(Unzip and run index.html)</p>
         </div>
-        <div class="invis" style="top: 5%; left: 55%; width: 40%; height: 90%">
-            <h2 class="gtext">Guides</h2>
+        <div class="no-highlight" style="position: absolute; top: 5%; left: 55%; width: 40%; height: 90%">
+            <h2>Guides</h2>
             <p>(Probably) coming soon.</p>
         </div>
     </div>
 
     <!--TAB 3-->
-    <tab style="left: 42.5%; width: 15%" onclick="opentab('cl')" id="cl">
+    <div id="cl" class="tab highlight" style="left: 42.5%; width: 15%" onclick="opentab('cl')">
         <p>Tools</p>
-    </tab>
-    <div style="width: 30%; height: 80%; left: 35%" id="cl_b">
+    </div>
+    <div id="cl_b" class="tab-window highlight" style="width: 30%; height: 80%; left: 35%">
         <p>All we have is Cloaxer rn.</p>
         <h2>Cloaxer</h2>
         <p style="margin-right: 10%; margin-left: 10%">
@@ -88,7 +87,7 @@
             Instructions: Press the "prompt" button below and put in your link
             (without https:// before it.)
         </p>
-        <br />
+        <br>
         <button style="
           width: 50%;
           height: 10%;
@@ -100,16 +99,16 @@
     </div>
 
     <!--TAB 4-->
-    <tab style="left: 59.5%; width: 15%" onclick="opentab('in')" id="in">
+    <div id="in" class="tab highlight" style="left: 59.5%; width: 15%" onclick="opentab('in')">
         <p>Info</p>
-    </tab>
-    <div style="width: 80%; height: 80%; left: 10%" id="in_b">
+    </div>
+    <div id="in_b" class="tab-window highlight" style="width: 80%; height: 80%; left: 10%">
         <h2>Info</h2>
         <h3>v1.1 - 5/11/2026</h3>
         <h3>Made by https://github.com/ddddd-dbase (UGA dev 2)</h3>
         <h3>Email: loverofelpotatos@gmail.com</h3>
         <h3>No Ai used :D</h3>
-        <br />
+        <br>
         <h2>Changelog</h2>
         <p>Link fixes will not be included.</p>
         <textarea readonly style="width: 80%; height: 40%">
@@ -147,43 +146,43 @@ v0.1 - 4/20/2026
     </div>
 
     <!--TAB 5-->
-    <tab style="left: 76.5%; width: 15%" onclick="opentab('se')" id="se">
+    <div id="se" class="tab highlight" style="left: 76.5%; width: 15%" onclick="opentab('se')">
         <p style="letter-spacing: -3%">Settings / Suggestions</p>
-    </tab>
-    <div style="width: 80%; height: 80%; left: 10%" id="se_b">
+    </div>
+    <div id="se_b" class="tab-window highlight" style="width: 80%; height: 80%; left: 10%">
         <h2>Settings</h2>
         <form>
             <label>Auto self-cloak on launch</label>
-            <input type="checkbox" id="self-cloak" style="display: inline-flex" />
+            <input type="checkbox" id="self-cloak" style="display: inline-flex">
             <p>(requires popups to be enabled)</p>
-            <br />
+            <br>
             <label>Replace original tab</label>
-            <input type="checkbox" id="replacemain" class="reqcloak" />
+            <input type="checkbox" id="replacemain" class="reqcloak">
             <p>
                 (Do note that Cloaked links will not open in a new tab in cloaked
                 form.)
             </p>
-            <br />
+            <br>
             <label>Always show home button</label>
-            <input type="checkbox" id="hometoggle" />
+            <input type="checkbox" id="hometoggle">
             <p>Reload to fix if broken.</p>
-            <br />
+            <br>
             <label>Dynamic background (particles)</label>
-            <input type="checkbox" id="particletoggle" checked />
-            <br />
-            <br />
-            <br />
+            <input type="checkbox" id="particletoggle" checked>
+            <br>
+            <br>
+            <br>
             <button type="button" onclick="window.location.reload()"
                 style="width: 10%; height: 8%; transform: translate(-50%, -10%)">
                 Reload
             </button>
-            <br />
-            <br />
-            <br />
-            <br />
+            <br>
+            <br>
+            <br>
+            <br>
             <h2>Suggestions</h2>
             <p>Got suggestions for UGA? Fill out the form below.</p>
-            <br />
+            <br>
             <button type="button" style="transform: translate(-50%, -10%); width: 10%; height: 8%"
                 onclick="openIFrame('https://forms.office.com/r/Q1b91AwsJ1')">
                 Open Form
@@ -214,9 +213,9 @@ v0.1 - 4/20/2026
     </div>
 
     <!--Escape button-->
-    <esc id="escbutton">
+    <div id="escbutton" class="esc-btn no-highlight bottom-corner-bevel-8">
         <p>Home</p>
-    </esc>
+    </div>
 
     <script src="particles.min.js"></script>
     <script src="app.js"></script>

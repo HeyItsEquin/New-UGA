@@ -1,0 +1,19 @@
+:root {
+    --background-color-primary: rgba(0, 0, 0, 0.8);
+
+    --font-family-primary: "Autowide", sans-serif;
+
+    --font-color-light: rgb(255, 255, 255);
+    --font-color-dark: rgb(153, 153, 153);
+    --font-color-primary: rgb(21, 255, 0);
+    --font-color-secondary: rgb(92, 255, 78);
+    --font-color-tertiary: rgb(18, 209, 0);
+
+    --text-shadow-alpha: 0.596;
+    --text-shadow-light: rgba(255, 255, 255, var(--text-shadow-alpha));
+    --text-shadow-dark: rgba(0, 0, 0, var(--text-shadow-alpha));
+    --text-shadow-primary: rgba(21, 255, 0, var(--text-shadow-alpha));
+
+    --highlight-border-primary: rgb(16, 184, 1);
+    --highlight-shadow-primary: rgba(21, 255, 0, 0.3);
+}

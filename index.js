@@ -232,10 +232,10 @@ if (localStorage.getItem("showesc") == "true") {
     esctoggle.checked = true;
 }
 
-window.addEventListener("beforeunload", (e) => {
-    e.preventDefault();
-    e.returnValue = "";
-});
+// window.addEventListener("beforeunload", (e) => {
+//     e.preventDefault();
+//     e.returnValue = "";
+// });
 
 async function downloadfile(path, name) {
     const url =
