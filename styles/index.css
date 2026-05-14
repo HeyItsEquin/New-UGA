@@ -186,6 +186,7 @@ button.main {
 }
 
 .tab p {
+    user-select: none;
     color: rgb(92, 255, 78);
     text-shadow: 0 0 10px rgba(21, 255, 0, 0.596);
     font-size: 1.1vw;
