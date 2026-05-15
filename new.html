@@ -39,14 +39,60 @@
         </div>
         <div id="content-main" style="display: flex; flex-grow: 1;">
             <div class="stack-grid" style="width: 100%;">
-                <div class="centered" style="grid-area: 1/1; position: relative; bottom: 5%; width: 100%;">
+                <div class="centered" style="grid-area: 1/1; position: relative; bottom: 8%; width: 100%;">
                     <div id="page-title">
                         <h1 class="fnt-audiowide">UGA</h1>
                         <p class="fnt-audiowide">new update every monday</p>
                     </div>
                 </div>
-                <div id="content-windows" class="centered" style="grid-area: 1/1; width: 80%; height: 90%;">
-                    
+                <div id="content-windows" class="centered" style="grid-area: 1/1; width: 80vw; height: 80vh;">
+                    <div id="window-ga-prox" class="inactive" style="width: 100%; height: 100%;">
+                        <div class="tab-window border-highlight">
+                            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                                <div class="center-align-container">
+                                    <h1 class="win-header fnt-audiowide">Gąmes / Pröxies</h1>
+                                </div>
+                                <div style="flex-grow: 1;">
+                                    <div style="display: flex; justify-content: center; width: 100%; height: 100%;">
+                                        <div style="flex-grow: 1;">
+
+                                        </div>
+                                        <div>
+                                            <svg height="100%" width="100">
+                                                <line class="divider-line" x1="50%" y1="2%" x2="50%" y2="95%">
+                                            </svg>
+                                        </div>
+                                        <div style="flex-grow: 1;">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="center-align-container">
+                                    <h1 class="win-subheader fnt-audiowide">Broken? Try something else or check out Downloads.</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="window-downloads" class="inactive" style="width: 100%; height: 100%;">
+                        <div class="tab-window border-highlight">
+
+                        </div>
+                    </div>
+                    <div id="window-tools" class="inactive" style="width: 30%; height: 100%;">
+                        <div class="tab-window border-highlight">
+
+                        </div>
+                    </div>
+                    <div id="window-info" class="inactive" style="width: 100%; height: 100%;">
+                        <div class="tab-window border-highlight">
+
+                        </div>
+                    </div>
+                    <div id="window-settings" class="inactive" style="width: 100%; height: 100%;">
+                        <div class="tab-window border-highlight">
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,27 +100,27 @@
             <div class="centered" style="width: 100%">
                 <div style="display: flex; align-items: center; justify-content: center;">
                     <div id="page-tabs">
-                        <div id="tab-ga-prox" class="tab clickable border-highlight fnt-audiowide">
+                        <div id="tab-ga-prox" class="tab clickable border-highlight fnt-audiowide" onclick="makeActive('ga-prox')">
                             <div class="top-align-container">
                                 <p>Gąmes / Pröxies</p>
                             </div>
                         </div>
-                        <div id="tab-downloads" class="tab clickable border-highlight fnt-audiowide">
+                        <div id="tab-downloads" class="tab clickable border-highlight fnt-audiowide" onclick="makeActive('downloads')">
                             <div class="top-align-container">
                                 <p>Downloads / Guides</p>
                             </div>
                         </div>
-                        <div id="tab-tools" class="tab clickable border-highlight fnt-audiowide">
+                        <div id="tab-tools" class="tab clickable border-highlight fnt-audiowide" onclick="makeActive('tools')">
                             <div class="top-align-container">
                                 <p>Tools</p>
                             </div>
                         </div>
-                        <div id="tab-info" class="tab clickable border-highlight fnt-audiowide">
+                        <div id="tab-info" class="tab clickable border-highlight fnt-audiowide" onclick="makeActive('info')">
                             <div class="top-align-container">
                                 <p>Info</p>
                             </div>
                         </div>
-                        <div id="tab-settings" class="tab clickable border-highlight fnt-audiowide">
+                        <div id="tab-settings" class="tab clickable border-highlight fnt-audiowide" onclick="makeActive('settings')">
                             <div class="top-align-container">
                                 <p>Settings</p>
                             </div>

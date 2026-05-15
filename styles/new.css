@@ -2,7 +2,7 @@
     --clr-surface-light: #FFFFFF;
     --clr-surface-dark: #000000;
 
-    --clr-surface-0: #080808;
+    --clr-surface-0: #000000CC;
     --clr-surface-1: #323232;
 
     --clr-primary-0: #15FF00;
@@ -63,7 +63,7 @@
 
     color: var(--clr-surface-light);
     font-size: 0.8em;
-    margin: 8px;
+    margin-top: 3%;
 }
 
 #esc-wrapper {
@@ -137,6 +137,12 @@
     align-items: start;
 }
 
+.center-align-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .border-highlight {
     border: 1.5px solid var(--clr-border-primary);
     box-shadow: inset 0 0 20px 5px var(--clr-shadow-1);
@@ -169,4 +175,38 @@
     margin-bottom: 10%;
     color: var(--clr-primary-1);
     text-shadow: 0 0 10px var(--clr-shadow-0);
+}
+
+#content-windows {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    bottom: 2%;
+}
+[id*="window-"].inactive {
+    display: none;
+}
+.tab-window {
+    border-radius: 20px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--clr-surface-0);
+}
+
+/* Classes for windows */
+.win-header, .win-subheader {
+    font-size: 1.5em;
+    color: var(--clr-primary-0);
+    text-shadow: 0 0 10px var(--clr-shadow-0);
+}
+
+.win-subheader {
+    font-weight: lighter;
+    font-size: 0.8em;
+}
+
+.divider-line {
+    stroke: var(--clr-primary-1);
+    stroke-width: 2;
 }
