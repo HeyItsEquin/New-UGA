@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent browser caching
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    -->
+    <title>New Tab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/new.css">
+</head>
+
+<body style="margin: 0px; padding: 0px;">
+    <div id="background" class="fill-screen">
+        <div id="particles-js" class="fill-parent"></div>
+    </div>
+
+    <div class="fill-screen" style="display: flex; flex-direction: column;">
+        <div id="content-top">
+            <div class="stack-grid">
+                <p id="current-time" class="fnt-audiowide">5/15/26</p>
+                <div id="esc-wrapper" class="hide">
+                    <div id="esc-buttons">
+                        <div id="esc-region">
+                            <button id="esc-btn" class="clickable fnt-audiowide">
+                                <p>Home</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="content-main" style="display: flex; flex-grow: 1;">
+            <div class="stack-grid" style="width: 100%;">
+                <div class="centered" style="grid-area: 1/1; position: relative; bottom: 5%; width: 100%;">
+                    <div id="page-title">
+                        <h1 class="fnt-audiowide">UGA</h1>
+                        <p class="fnt-audiowide">new update every monday</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="content-bottom">
+            <div class="centered" style="width: 100%">
+                <div style="display: flex; align-items: center; justify-content: center;">
+                    <div id="page-tabs">
+                        <div id="tab-ga-prox" class="tab clickable border-highlight fnt-audiowide">
+                            <div class="top-align-container">
+                                <p>Gąmes / Pröxies</p>
+                            </div>
+                        </div>
+                        <div id="tab-downloads" class="tab clickable border-highlight fnt-audiowide">
+                            <div class="top-align-container">
+                                <p>Downloads / Guides</p>
+                            </div>
+                        </div>
+                        <div id="tab-tools" class="tab clickable border-highlight fnt-audiowide">
+                            <div class="top-align-container">
+                                <p>Tools</p>
+                            </div>
+                        </div>
+                        <div id="tab-info" class="tab clickable border-highlight fnt-audiowide">
+                            <div class="top-align-container">
+                                <p>Info</p>
+                            </div>
+                        </div>
+                        <div id="tab-settings" class="tab clickable border-highlight fnt-audiowide">
+                            <div class="top-align-container">
+                                <p>Settings</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script defer src="particles.min.js"></script>
+    <script defer src="particles.loader.js"></script>
+    <script defer src="new.js"></script>
+</body>
+
+</html>
