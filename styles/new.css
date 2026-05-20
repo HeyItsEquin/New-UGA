@@ -58,6 +58,10 @@
     z-index: -1;
 }
 
+#particles-js.hide {
+    display: none;
+}
+
 #current-time {
     grid-area: 1/1;
     align-self: center;
@@ -79,18 +83,23 @@
     position: relative;
     width: 100%;
     height: 100%;
+
+    z-index: 100;
 }
 #esc-wrapper.hide {
     display: none;
 }
 #esc-buttons {
     width: 10%;
-    top: 0px;
+    align-self: start;
 }
 #esc-region {
     height: 100%;
     transform: translateY(-60%);
     transition: transform 0.1s ease-out;
+}
+#esc-region.show-always {
+    transform: translateY(0%);
 }
 #esc-btn {
     align-self: start;
@@ -314,4 +323,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#content-presenter {
+    overflow-y: hidden;
+}
+#content-presenter.hidden {
+    display: none;
+}
+#content-presenter iframe {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    border: none;
 }
