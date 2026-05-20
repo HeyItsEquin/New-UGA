@@ -15,6 +15,8 @@
     --clr-border-primary: #10B801;
 }
 
+.dbg { border: 1px solid red; }
+
 .fnt-audiowide {
     font-family: "Audiowide", "Segoe UI", Tahoma, sans-serif;
 }
@@ -208,6 +210,108 @@
 }
 
 .divider-line {
-    stroke: var(--clr-primary-1);
+    stroke: var(--clr-border-primary);
     stroke-width: 2;
+}
+
+.win-btn {
+    border-width: 1px;
+    color: var(--clr-primary-1);
+    width: 40%;
+    height: 15%;
+    font-size: 1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: rgba(0, 0, 0, 0);
+    text-shadow: 0 0 10px var(--clr-shadow-0);
+    box-shadow: inset 0 0 10px 3px var(--clr-shadow-1);
+    cursor: pointer;
+}
+
+#downloads-sections {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 1em;
+}
+
+.win-section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.win-btn-stack {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#info-sections {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#changelog {
+    background-color: rgba(73, 73, 73, 0.3);
+    text-align: center;
+    outline: none;
+    resize: none;
+    box-shadow: none;
+    color: var(--clr-surface-light);
+    overflow-y: auto;
+    white-space: pre-wrap;
+    font-size: 0.9em;
+}
+
+.option {
+    margin-bottom: 1.5em;
+}
+.option .label {
+    display: flex;
+    justify-content: center;
+}
+.option .label h1 {
+    color: var(--clr-surface-light);
+    font-size: 0.9em;
+    font-weight: 400;
+    margin: 0px 20px 0px 0px;
+}
+.option .label input {
+    accent-color: var(--clr-surface-1);
+    margin: 0px;
+}
+.option .info {
+    text-align: center;
+    margin-top: 0px;
+}
+
+#opt-reload {
+    height: 100%;
+    width: 10%;
+    font-size: 0.8em;
+    border: 1px solid var(--clr-surface-light);
+    box-shadow: none;
+    color: var(--clr-surface-light);
+}
+
+.win-btn-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

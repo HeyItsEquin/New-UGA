@@ -2,7 +2,25 @@ const windowIds = [
     "ga-prox", "downloads", "tools", "info", "settings"
 ];
 
+const urls = {
+    "selenite": "https://mail.adriapartners.net",
+    "prism": "https://schoolclassroomcanvacanvacodecom.7879.22web.org/",
+    "interstellar": "https://potato.wwe.ddnss.de",
+    "frogie": "https://mshjvxae.1vib36z.ddnss.de/"
+}
+
 let _activeWindow = "";
+
+function openUrl(id) {
+    if (!(id in urls))
+        return;
+    
+    openIframe(urls[id]);
+}
+
+function openIframe(url) {
+    return;
+}
 
 function setActiveWindow(winId) {
     _activeWindow = winId;
