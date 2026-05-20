@@ -18,6 +18,37 @@ let _settings = {
     "show_particles": true
 };
 
+let initSettingsApplied = false;
+
+const LogLevel = {
+    Info: 0,
+    Warn: 1,
+    Error: 2
+};
+function log(msg, lvl = 0, display = false) {
+    switch (lvl) {
+        case 0:
+            console.log(msg);
+            break;
+        case 1:
+            console.warn(msg);
+            break;
+        case 2:
+            console.error(msg);
+            break;
+    }
+
+    if (display) alert(msg);
+}
+
+// Small helper fn
+String.prototype.removePrefix = function(s) {
+    let pre = this.slice(0, s.length);
+    if (pre === s)
+        return this.slice(s.length, this.length);
+    return this;
+}
+
 function getSettings() {
     let settings = JSON.parse(localStorage.getItem("settings"));
     if (settings == undefined) {
@@ -26,6 +57,12 @@ function getSettings() {
     }
 
     return settings;
+}
+
+function getSetting(k) {
+    if (!Object.hasOwn(_settings, k)) return undefined;
+
+    return _settings[k];
 }
 
 function updateSetting(k,v) {
@@ -46,7 +83,7 @@ function updateOptionElements() {
 
     let settings = getSettings();
     for (let opt of opts.children) {
-        if (!opt.classList.contains("option")) return;
+        if (!opt.classList.contains("option")) continue;
 
         let check = opt.querySelector("input");
         let option = opt.id.slice(4, opt.id.length).replaceAll("-", "_");
@@ -72,7 +109,7 @@ function applySettings() {
     updateOptionElements();
     let settings = getSettings();
 
-    if (settings.auto_cloak == true) cloakSelf();
+    if (settings.auto_cloak == true && initSettingsApplied == false) cloakSelf();
     if (settings.show_home == true) {
         let region = document.getElementById("esc-region");
         if (!region) return;
@@ -193,12 +230,28 @@ function makeActive(winId) {
     updateWindows();
 }
 
+function cloaxerPrompt() {
+    let url = prompt("Enter URL to be cloaxed");
+    openCloaked(url);
+}
+
 function cloakSelf() {
-    // TODO: Implement
+    let inFrame;
+    try {
+        inFrame = (window !== top);
+    } catch {
+        inFrame = true;
+    }
+    if (!inFrame) openCloaked(window.location.href);    
 }
 
 function openCloaked(url) {
-    if (!URL.canParse(url) || url == "https://null") return;
+    if (!URL.canParse(url) || url == "https://null") {
+        log(
+            "Improper URL. (ex: https://example.com, example.com)",
+            LogLevel.Error, true
+        );
+    }
 
     // Whether we're currently in an iframe
     let inFrame = false;
@@ -211,12 +264,16 @@ function openCloaked(url) {
     let ab = localStorage.getItem("ab") || true;
     localStorage.setItem("ab", ab);
 
-    if (inFrame || !ab) return;
+    if (inFrame || !ab) {
+        openIframe(url);
+    }
 
     let popup = open("about:blank", "_blank");
     setTimeout(() => {
         if (!popup || popup.closed) {
-            alert("Popups are required for UGA self-cloaking. Please enable them :)");
+            log("Popups are required for UGA self-cloaking. Please enable them :)",
+                LogLevel.Warn, true
+            );
             return;
         }
 
@@ -243,6 +300,21 @@ function openCloaked(url) {
 
         doc.head.appendChild(link);
         doc.body.appendChild(iframe);
+
+        let settings = getSettings();
+        if (settings.replace_original == true)
+            location.replace("https://google.com/");
+
+        const script = doc.createElement("script");
+        script.textContent = `
+            window.onbeforeunload = (ev) => {
+                let conf = "Leave Site?";
+                (event || window.event).returnValue = conf;
+                return conf;
+            }
+        `
+
+        // doc.body.appendChild(script);
     }, 500);
 }
 
@@ -251,4 +323,5 @@ function openCloaked(url) {
     _activeWindow = getActiveWindow();
     updateWindows();
     applySettings();
+    initSettingsApplied = true;
 })();
