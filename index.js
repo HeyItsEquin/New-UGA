@@ -60,6 +60,10 @@ function joinPath(p1, p2) {
     }
 }
 
+function getFilename(fp) {
+    return fp.replace(/^.*[\\/]/, '');
+}
+
 function getStorageContext() {
     return window.opener ? window.opener.localStorage : localStorage;
 }
@@ -347,7 +351,7 @@ function openCloaked(url) {
     }, 500);
 }
 
-async function downloadFile(rp, name, use_direct = false) {
+async function downloadFile(rp, use_direct = false) {
     let fp = _downloadDir + rp;
     let downloadUrl = "";
     let fullPath = joinPath(GithubUrl, fp);
@@ -357,6 +361,8 @@ async function downloadFile(rp, name, use_direct = false) {
     else
         downloadUrl = `https://cdn.jsdelivr.net/gh/${fullPath}`;
     
+    let name = getFilename(rp);
+
     let res = await fetch(downloadUrl);
     let blob = await res.blob();
     let link = document.createElement("a");
