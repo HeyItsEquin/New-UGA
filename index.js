@@ -41,12 +41,23 @@ function log(msg, lvl = 0, display = false) {
     if (display) alert(msg);
 }
 
+const _downloadDir = "downloads/";
+const GithubUrl = "HeyItsEquin/New-UGA";
+
 // Small helper fn
 String.prototype.removePrefix = function(s) {
     let pre = this.slice(0, s.length);
     if (pre === s)
         return this.slice(s.length, this.length);
     return this;
+}
+
+function joinPath(p1, p2) {
+    if (p1.endsWith("/")) {
+        return p1 + p2;
+    } else {
+        return p1 + "/" + p2;
+    }
 }
 
 function getStorageContext() {
@@ -334,6 +345,24 @@ function openCloaked(url) {
 
         // doc.body.appendChild(script);
     }, 500);
+}
+
+async function downloadFile(rp, name, use_direct = false) {
+    let fp = _downloadDir + rp;
+    let downloadUrl = "";
+    let fullPath = joinPath(GithubUrl, fp);
+
+    if (use_direct)
+        downloadUrl = `https://github.com/${fullPath}`;
+    else
+        downloadUrl = `https://cdn.jsdelivr.net/gh/${fullPath}`;
+    
+    let res = await fetch(downloadUrl);
+    let blob = await res.blob();
+    let link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = name;
+    link.click();
 }
 
 (() => {
