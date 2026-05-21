@@ -1,5 +1,3 @@
-out.html
-index_out.html
-index.min.html
+*index.min.html
 old/
-.jsdelivr.purge
+*.jsdelivr.purge
