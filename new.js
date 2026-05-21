@@ -49,11 +49,17 @@ String.prototype.removePrefix = function(s) {
     return this;
 }
 
+function getStorageContext() {
+    return window.opener ? window.opener.localStorage : localStorage;
+}
+
 function getSettings() {
-    let settings = JSON.parse(localStorage.getItem("settings"));
+    let storageSource = getStorageContext();
+
+    let settings = JSON.parse(storageSource.getItem("settings"));
     if (settings == undefined) {
         settings = _settings;
-        localStorage.setItem("settings", JSON.stringify(settings));
+        storageSource.setItem("settings", JSON.stringify(settings));
     }
 
     return settings;
@@ -71,8 +77,13 @@ function updateSetting(k,v) {
         return;
     }
 
+    let storageSource = getStorageContext();
+    
+    let currentSettings = JSON.parse(storageSource.getItem("settings")) || _settings;
+    currentSettings[k] = v;
     _settings[k] = v;
-    localStorage.setItem("settings", JSON.stringify(_settings));
+
+    storageSource.setItem("settings", JSON.stringify(currentSettings));
 
     applySettings();
 }
@@ -88,7 +99,7 @@ function updateOptionElements() {
         let check = opt.querySelector("input");
         let option = opt.id.slice(4, opt.id.length).replaceAll("-", "_");
 
-        if (!Object.hasOwn(settings, option)) return;
+        if (!Object.hasOwn(settings, option)) continue;
 
         // All settings are boolean options for now so this is fine
         check.checked = settings[option];
@@ -107,6 +118,10 @@ function updateOption(opt) {
 
 function applySettings() {
     updateOptionElements();
+    applySettingsVisuals();
+}
+
+function applySettingsVisuals() {
     let settings = getSettings();
 
     if (settings.auto_cloak == true && initSettingsApplied == false) cloakSelf();
@@ -168,15 +183,17 @@ function closeIframe() {
 }
 
 function setActiveWindow(winId) {
+    let storageSource = getStorageContext();
     _activeWindow = winId;
-    localStorage.setItem("activeWindow", winId);
+    storageSource.setItem("activeWindow", winId);
 }
 
 function getActiveWindow() {
-    let active = localStorage.getItem("activeWindow");
+    let storageSource = getStorageContext();
+    let active = storageSource.getItem("activeWindow");
     if (active == undefined) {
         active = "";
-        localStorage.setItem("activeWindow", "");
+        storageSource.setItem("activeWindow", "");
     }
 
     return active;
@@ -261,8 +278,9 @@ function openCloaked(url) {
         inFrame = true;
     }
 
-    let ab = localStorage.getItem("ab") || true;
-    localStorage.setItem("ab", ab);
+    let storageSource = getStorageContext();
+    let ab = storageSource.getItem("ab") || true;
+    storageSource.setItem("ab", ab);
 
     if (inFrame || !ab) {
         openIframe(url);

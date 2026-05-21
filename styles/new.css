@@ -310,13 +310,20 @@
     margin-top: 0px;
 }
 
-#opt-reload {
-    height: 100%;
+#opt-reload, #opt-form {
     width: 10%;
     font-size: 0.8em;
     border: 1px solid var(--clr-surface-light);
     box-shadow: none;
     color: var(--clr-surface-light);
+}
+
+#opt-form {
+    height: 30%;
+}
+
+#opt-reload {
+    height: 100%;
 }
 
 .win-btn-link {
