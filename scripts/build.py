@@ -8,6 +8,8 @@ INDENT_LEVEL=4
 
 File: TypeAlias = Tuple[str, str]
 
+_cdn_links = []
+
 def get_short_url():
     try:
         repo = Repo(".")
@@ -44,6 +46,11 @@ def write_output(out: str, soup: BeautifulSoup) -> None:
         fmt = HTMLFormatter(indent=INDENT_LEVEL)
         output = soup.prettify(formatter=fmt)
         f.write(output) # type: ignore
+
+    # Write JsDelivr links for JsDelivr cache purge
+    with open(".jsdelivr.purge", "w"):
+        for url in _cdn_links:
+            f.write(f"{url}\n")
 
 def append_head(soup: BeautifulSoup, tag: Tag) -> None:
     head = soup.find("head")
@@ -96,6 +103,7 @@ def parse_scripts(soup: BeautifulSoup) -> list[File]:
         try:
             contents = read_file(file)
             scripts.append((file, contents))
+            print(f"Found script: {file}")
         except FileNotFoundError:
             print(f"Script file not found: {file} (does it resolve in your HTML?)")
         except IsADirectoryError:
@@ -122,6 +130,7 @@ def add_css(soup: BeautifulSoup, jsdelivr_repo: Optional[str] = None) -> None:
             style_el.string += full
         else:
             url = jsdelivr_url(jsdelivr_repo, doc[0])
+            _cdn_links.append(url)
             link = soup.new_tag("link")
             link["rel"] = "stylesheet"
             link["type"] = "text/css"
@@ -129,6 +138,7 @@ def add_css(soup: BeautifulSoup, jsdelivr_repo: Optional[str] = None) -> None:
             
             append_head(soup, link)
 
+    # Don't embed empty style tag
     if style_el.string == "" and jsdelivr_repo is None:
         return
     append_head(soup, style_el)
@@ -138,7 +148,7 @@ def add_scripts(soup: BeautifulSoup, jsdelivr_repo: Optional[str] = None) -> Non
 
     for script in scripts:
         script_tag = soup.new_tag("script")
-        if script_tag is not Tag:
+        if not isinstance(script_tag, Tag):
             return
         if jsdelivr_repo is None:
             indent = (" "*INDENT_LEVEL)*3
@@ -149,7 +159,8 @@ def add_scripts(soup: BeautifulSoup, jsdelivr_repo: Optional[str] = None) -> Non
             script_tag.string = full
         else:
             url = jsdelivr_url(jsdelivr_repo, script[0])
-            script_tag["defer"] = None
+            _cdn_links.append(url)
+            script_tag["defer"] = None # type: ignore
             script_tag["src"] = url
 
         body = soup.find("body")
@@ -190,8 +201,18 @@ def main() -> None:
     html = read_file(inp_file)
     soup = BeautifulSoup(html, "html.parser")
 
-    add_css(soup, github_url if css_only == True else None)
-    add_scripts(soup, github_url if scripts_only == True else None)
+    if scripts_only and not css_only:
+        css_cdn = None
+        scripts_cdn = github_url
+    elif css_only and not scripts_only:
+        css_cdn = github_url
+        scripts_cdn = None
+    else:
+        css_cdn = github_url
+        scripts_cdn = github_url
+
+    add_css(soup, css_cdn)
+    add_scripts(soup, scripts_cdn)
 
     write_output(output, soup)
 
