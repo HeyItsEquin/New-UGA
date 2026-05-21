@@ -1,250 +1,345 @@
-/*
-https://cdn.jsdelivr.net/gh/ddddd-dbase/New-UGA@main/script.js
-https://cdn.jsdelivr.net/gh/ddddd-dbase/uga@main/script.js
-https://cdn.jsdelivr.net/gh/ddddd-dbase/potatopcs@main/script.js
-*/
+const windowIds = [
+    "ga-prox", "downloads", "tools", "info", "settings"
+];
 
-function selenite() {
-    openIFrame("https://mail.adriapartners.net");
-}
-function prism() {
-    openIFrame("https://schoolclassroomcanvacanvacodecom.7879.22web.org/");
-}
-function interstellar() {
-    openIFrame("https://potato.wwe.ddnss.de");
-}
-function frogie() {
-    openIFrame("https://mshjvxae.1vib36z.ddnss.de/");
+const urls = {
+    "selenite": "https://mail.adriapartners.net",
+    "prism": "https://schoolclassroomcanvacanvacodecom.7879.22web.org/",
+    "interstellar": "https://potato.wwe.ddnss.de",
+    "frogie": "https://mshjvxae.1vib36z.ddnss.de/"
 }
 
-const popup = document.getElementById("popup");
+let _activeWindow = "";
 
-if (!(Date.now() > 1779177600000)) {
-    popup.remove();
-}
+let _settings = {
+    "auto_cloak": false,
+    "replace_original": false,
+    "show_home": false,
+    "show_particles": true
+};
 
-let displaydate = new Date().toLocaleString();
-const timetext = document.getElementById("time");
+let initSettingsApplied = false;
 
-timetext.innerText = displaydate;
-
-setInterval(() => {
-    displaydate = new Date().toLocaleString();
-    timetext.innerText = displaydate;
-}, 200);
-
-function closepopup() {
-    popup.remove();
-}
-
-let currenttab = "none";
-
-function opentab(tab) {
-    if (currenttab != "none") {
-        closetab();
+const LogLevel = {
+    Info: 0,
+    Warn: 1,
+    Error: 2
+};
+function log(msg, lvl = 0, display = false) {
+    switch (lvl) {
+        case 0:
+            console.log(msg);
+            break;
+        case 1:
+            console.warn(msg);
+            break;
+        case 2:
+            console.error(msg);
+            break;
     }
-    if (currenttab != tab) {
-        currenttab = tab;
-        const tabTemp = document.getElementById(currenttab);
-        tabTemp.classList.add("open");
-        const tabToOpen = document.getElementById(tab + "_b");
-        tabToOpen.classList.add("open");
+
+    if (display) alert(msg);
+}
+
+// Small helper fn
+String.prototype.removePrefix = function(s) {
+    let pre = this.slice(0, s.length);
+    if (pre === s)
+        return this.slice(s.length, this.length);
+    return this;
+}
+
+function getStorageContext() {
+    return window.opener ? window.opener.localStorage : localStorage;
+}
+
+function getSettings() {
+    let storageSource = getStorageContext();
+
+    let settings = JSON.parse(storageSource.getItem("settings"));
+    if (settings == undefined) {
+        settings = _settings;
+        storageSource.setItem("settings", JSON.stringify(settings));
+    }
+
+    return settings;
+}
+
+function getSetting(k) {
+    if (!Object.hasOwn(_settings, k)) return undefined;
+
+    return _settings[k];
+}
+
+function updateSetting(k,v) {
+    if (!Object.hasOwn(_settings, k)) {
+        console.warn(`Failed to apply setting {${k} = ${v}}. ${k} not found`);
+        return;
+    }
+
+    let storageSource = getStorageContext();
+    
+    let currentSettings = JSON.parse(storageSource.getItem("settings")) || _settings;
+    currentSettings[k] = v;
+    _settings[k] = v;
+
+    storageSource.setItem("settings", JSON.stringify(currentSettings));
+
+    applySettings();
+}
+
+function updateOptionElements() {
+    let opts = document.getElementById("opts-stack");
+    if (!opts) return;
+
+    let settings = getSettings();
+    for (let opt of opts.children) {
+        if (!opt.classList.contains("option")) continue;
+
+        let check = opt.querySelector("input");
+        let option = opt.id.slice(4, opt.id.length).replaceAll("-", "_");
+
+        if (!Object.hasOwn(settings, option)) continue;
+
+        // All settings are boolean options for now so this is fine
+        check.checked = settings[option];
+    }
+}
+
+function updateOption(opt) {
+    let elementId = `opt-${opt.replaceAll("_", "-")}`;
+    let element = document.getElementById(elementId);
+    if (!element) return;
+
+    let check = element.querySelector("input");
+    if (!check) return;
+    updateSetting(opt, check.checked);
+}
+
+function applySettings() {
+    updateOptionElements();
+    applySettingsVisuals();
+}
+
+function applySettingsVisuals() {
+    let settings = getSettings();
+
+    if (settings.auto_cloak == true && initSettingsApplied == false) cloakSelf();
+    if (settings.show_home == true) {
+        let region = document.getElementById("esc-region");
+        if (!region) return;
+        region.classList.add("show-always");
     } else {
-        currenttab = "none";
+        let region = document.getElementById("esc-region");
+        if (!region) return;
+        region.classList.remove("show-always");
     }
-}
-
-function closetab() {
-    if (currenttab != "none") {
-        const tabTemp = document.getElementById(currenttab);
-        tabTemp.classList.remove("open");
-        const tabtoclose = document.getElementById(currenttab + "_b");
-        tabtoclose.classList.remove("open");
-    }
-}
-
-const removeme = document.getElementById("removeme");
-setTimeout(() => {
-    removeme.remove();
-}, 100);
-
-const escbutton = document.getElementById("escbutton");
-function opencloak(url) {
-    if (URL.canParse(url) && url != "https://null") {
-        let inFrame;
-        try {
-            inFrame = window !== top;
-        } catch (e) {
-            inFrame = true;
-        }
-        if (!localStorage.getItem("ab")) localStorage.setItem("ab", true);
-        if (!inFrame && localStorage.getItem("ab") === "true") {
-            const popup = open("about:blank", "_blank");
-            setTimeout(() => {
-                if (!popup || popup.closed) {
-                    alert(
-                        "Popups are required for UGA self-cloaking. Please enable them :)",
-                    );
-                } else {
-                    const doc = popup.document;
-                    const iframe = doc.createElement("iframe");
-                    const style = iframe.style;
-                    const link = doc.createElement("link");
-                    doc.title = "My Drive - Google Drive";
-                    link.rel = "icon";
-                    link.href =
-                        "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png";
-
-                    //const urlParams = new URLSearchParams(window.location.search);
-                    //const targetUrl = urlParams.get("url");
-
-                    const siteToLoad = url ? decodeURIComponent(url) : location.href;
-
-                    iframe.src = siteToLoad;
-                    style.position = "fixed";
-                    style.top = style.bottom = style.left = style.right = 0;
-                    style.border = style.outline = "none";
-                    style.width = style.height = "100%";
-                    doc.head.appendChild(link);
-                    doc.body.appendChild(iframe);
-
-                    if (localStorage.getItem("replacecloak") == "true") {
-                        location.replace("https://google.com");
-                    }
-
-                    const script = doc.createElement("script");
-                    script.textContent = `
-                window.onbeforeunload = function (event) {
-                  const confirmationMessage = 'Leave Site?';
-              (event || window.event).returnValue = confirmationMessage;
-              return confirmationMessage;
-            };
-          `;
-                    doc.head.appendChild(script);
-                }
-            }, 1000);
-        } else {
-            openIFrame(url);
-        }
+    if (settings.show_particles == false) {
+        let particles = document.getElementById("particles-js");
+        if (!particles) return;
+        particles.classList.add("hide");
     } else {
-        alert("Improper URL. (ex: example.com )");
+        let particles = document.getElementById("particles-js");
+        if (!particles) return;
+        particles.classList.remove("hide");
     }
 }
 
-function openIFrame(url) {
-    window.scrollTo(0, 0);
-    const iframe = document.createElement("iframe");
+function openUrl(id) {
+    if (!Object.hasOwn(urls, id))
+        return;
+    
+    openIframe(urls[id]);
+}
+
+function openIframe(url) {
+    let presenter = document.getElementById("content-presenter");
+    if (!presenter) return;
+    presenter.classList.remove("hidden");
+
+    let iframe = presenter.querySelector("iframe");
+    if (!iframe) return;
     iframe.src = url;
-    iframe.id = "delete";
-    document.body.appendChild(iframe);
-    escbutton.style.display = "block";
-    const screen = document.createElement("div");
-    const text = document.createElement("h2");
-    text.textContent = "Loading...";
-    screen.id = "error";
-    screen.classList.add("error");
-    console.log(screen);
-    document.body.appendChild(screen);
-    screen.appendChild(text);
+
+    let home = document.getElementById("esc-wrapper");
+    if (!home) return;
+    home.classList.remove("hide");
+
+    return;
 }
 
-const replacemain = document.getElementById("replacemain");
-const selfcloak = document.getElementById("self-cloak");
+function closeIframe() {
+    let presenter = document.getElementById("content-presenter");
+    if (!presenter) return;
+    presenter.classList.add("hidden");
 
-if (localStorage.getItem("cloak") == "true") {
+    let iframe = presenter.querySelector("iframe");
+    if (!iframe) return;
+    iframe.src = "";
+
+    let home = document.getElementById("esc-wrapper");
+    if (!home) return;
+    home.classList.add("hide");
+}
+
+function setActiveWindow(winId) {
+    let storageSource = getStorageContext();
+    _activeWindow = winId;
+    storageSource.setItem("activeWindow", winId);
+}
+
+function getActiveWindow() {
+    let storageSource = getStorageContext();
+    let active = storageSource.getItem("activeWindow");
+    if (active == undefined) {
+        active = "";
+        storageSource.setItem("activeWindow", "");
+    }
+
+    return active;
+}
+
+function updateWindows() {
+    let active = getActiveWindow();
+    for (const win of windowIds) {
+        if (active == win) {
+            toggleWindow(win, true);
+        } else {
+            toggleWindow(win, false);
+        }
+    }
+}
+
+function toggleWindow(id, state) {
+    let winId = `window-${id}`;
+    let tabId = `tab-${id}`;
+
+    let win = document.getElementById(winId);
+    let tab = document.getElementById(tabId);
+
+    if (!win || !tab) return;
+
+    if (state == true) {
+        win.classList.remove("inactive");
+        tab.classList.add("active");
+    } else {
+        win.classList.add("inactive");
+        tab.classList.remove("active");
+    }
+}
+
+function updateTimeDisplay() {
+    const timeDisplay = document.getElementById("current-time");
+    if (!timeDisplay) return;
+
+    let currentTime = new Date().toLocaleString();
+
+    timeDisplay.textContent = currentTime;
+}
+
+function makeActive(winId) {
+    let win = getActiveWindow();
+    if (win == winId) {
+        setActiveWindow("");
+    } else {
+        setActiveWindow(winId);
+    }
+    updateWindows();
+}
+
+function cloaxerPrompt() {
+    let url = prompt("Enter URL to be cloaxed");
+    openCloaked(url);
+}
+
+function cloakSelf() {
     let inFrame;
     try {
-        inFrame = window !== top;
-    } catch (e) {
+        inFrame = (window !== top);
+    } catch {
         inFrame = true;
     }
-    selfcloak.checked = true;
-    if (!inFrame) {
-        opencloak(window.location.href);
-    }
+    if (!inFrame) openCloaked(window.location.href);    
 }
 
-const particletoggle = document.getElementById("particletoggle");
-const particlesdiv = document.getElementById("particles-js");
-
-particletoggle.addEventListener("change", (event) => {
-    if (event.currentTarget.checked) {
-        particlesdiv.style.display = "block";
-        localStorage.setItem("particles", "true");
-    } else {
-        particlesdiv.style.display = "none";
-        localStorage.setItem("particles", "false");
+function openCloaked(url) {
+    if (!URL.canParse(url) || url == "https://null") {
+        log(
+            "Improper URL. (ex: https://example.com, example.com)",
+            LogLevel.Error, true
+        );
     }
-});
 
-if (localStorage.getItem("particles") == "false") {
-    particlesdiv.style.display = "none";
-    particletoggle.checked = false;
+    // Whether we're currently in an iframe
+    let inFrame = false;
+    try {
+        inFrame = (window !== top);
+    } catch {
+        inFrame = true;
+    }
+
+    let storageSource = getStorageContext();
+    let ab = storageSource.getItem("ab") || true;
+    storageSource.setItem("ab", ab);
+
+    if (inFrame || !ab) {
+        openIframe(url);
+    }
+
+    let popup = open("about:blank", "_blank");
+    setTimeout(() => {
+        if (!popup || popup.closed) {
+            log("Popups are required for UGA self-cloaking. Please enable them :)",
+                LogLevel.Warn, true
+            );
+            return;
+        }
+
+        let doc = popup.document;
+        let iframe = doc.createElement("iframe");
+        let link = doc.createElement("link");
+        doc.title = "My Drive - Google Drive";
+        link.rel = "icon";
+        link.href = "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png";
+
+        let toLoad = url ? decodeURIComponent(url) : location.href;
+
+        iframe.src = toLoad;
+        iframe.style = `
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            padding: 0px;
+            margin: 0px;
+        `;
+
+        doc.head.appendChild(link);
+        doc.body.appendChild(iframe);
+
+        let settings = getSettings();
+        if (settings.replace_original == true)
+            location.replace("https://google.com/");
+
+        const script = doc.createElement("script");
+        script.textContent = `
+            window.onbeforeunload = (ev) => {
+                let conf = "Leave Site?";
+                (event || window.event).returnValue = conf;
+                return conf;
+            }
+        `
+
+        // doc.body.appendChild(script);
+    }, 500);
 }
 
-if (localStorage.getItem("replacecloak") == "true") {
-    replacemain.checked = true;
-}
-
-selfcloak.addEventListener("change", (event) => {
-    if (event.currentTarget.checked) {
-        localStorage.setItem("cloak", "true");
-    } else {
-        localStorage.setItem("cloak", "false");
-    }
-});
-
-replacemain.addEventListener("change", (event) => {
-    if (event.currentTarget.checked) {
-        localStorage.setItem("replacecloak", "true");
-    } else {
-        localStorage.setItem("replacecloak", "false");
-    }
-});
-
-escbutton.addEventListener("click", () => {
-    const todelete = document.getElementById("delete");
-    const screentodelete = document.getElementById("error");
-    if (todelete) {
-        screentodelete.remove();
-        todelete.classList.add("hidden");
-        setTimeout(() => {
-            todelete.remove();
-        }, 400);
-    }
-    escbutton.style.display = "none";
-});
-
-const esctoggle = document.getElementById("hometoggle");
-
-esctoggle.addEventListener("change", (event) => {
-    if (event.currentTarget.checked) {
-        escbutton.style.transform = "translate(-50%,0px)";
-        localStorage.setItem("showesc", "true");
-    } else {
-        escbutton.style.transform = "translate(-50%,-70%)";
-        localStorage.setItem("showesc", "false");
-    }
-});
-
-if (localStorage.getItem("showesc") == "true") {
-    escbutton.style.transform = "translate(-50%,0px)";
-    esctoggle.checked = true;
-}
-
-// window.addEventListener("beforeunload", (e) => {
-//     e.preventDefault();
-//     e.returnValue = "";
-// });
-
-async function downloadfile(path, name) {
-    const url =
-        "https://cdn.jsdelivr.net/gh/ddddd-dbase/New-UGA@main/" + path;
-    console.log(url);
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.download = name;
-    link.click();
-}
+(() => {
+    setInterval(updateTimeDisplay, 100);
+    _activeWindow = getActiveWindow();
+    updateWindows();
+    applySettings();
+    initSettingsApplied = true;
+})();

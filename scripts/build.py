@@ -129,6 +129,8 @@ def add_css(soup: BeautifulSoup, jsdelivr_repo: Optional[str] = None) -> None:
             
             append_head(soup, link)
 
+    if style_el.string == "" and jsdelivr_repo is None:
+        return
     append_head(soup, style_el)
 
 def add_scripts(soup: BeautifulSoup, jsdelivr_repo: Optional[str] = None) -> None:
@@ -136,6 +138,8 @@ def add_scripts(soup: BeautifulSoup, jsdelivr_repo: Optional[str] = None) -> Non
 
     for script in scripts:
         script_tag = soup.new_tag("script")
+        if script_tag is not Tag:
+            return
         if jsdelivr_repo is None:
             indent = (" "*INDENT_LEVEL)*3
             comment = f"// {script[0].removeprefix("./")}"
@@ -145,11 +149,14 @@ def add_scripts(soup: BeautifulSoup, jsdelivr_repo: Optional[str] = None) -> Non
             script_tag.string = full
         else:
             url = jsdelivr_url(jsdelivr_repo, script[0])
+            script_tag["defer"] = None
             script_tag["src"] = url
 
         body = soup.find("body")
 
-        if not script_tag.string == "" and body is not None and isinstance(body, Tag):
+        if body is not None and isinstance(body, Tag):
+            if jsdelivr_repo is None and script_tag.string == "":
+                continue
             body.append(script_tag)
 
 def main() -> None:
@@ -173,7 +180,8 @@ def main() -> None:
     # Automatically detect repo
     if in_repo():
         url = get_short_url()
-        if github_url is not None:
+        print(f"Found Github repository: {url}")
+        if github_url is None:
             github_url = url
             
     if use_local == True:
@@ -182,8 +190,8 @@ def main() -> None:
     html = read_file(inp_file)
     soup = BeautifulSoup(html, "html.parser")
 
-    add_css(soup, github_url if css_only == False else None)
-    add_scripts(soup, github_url if scripts_only == False else None)
+    add_css(soup, github_url if css_only == True else None)
+    add_scripts(soup, github_url if scripts_only == True else None)
 
     write_output(output, soup)
 
