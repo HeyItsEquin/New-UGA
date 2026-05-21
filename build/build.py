@@ -3,6 +3,7 @@ from bs4.formatter import HTMLFormatter
 from typing import Tuple, TypeAlias, Optional
 from argparse import ArgumentParser
 from git import Repo, InvalidGitRepositoryError
+from pathlib import Path
 
 INDENT_LEVEL=4
 
@@ -42,15 +43,17 @@ def read_file(fp: str) -> str:
         return f.read()
 
 def write_output(out: str, soup: BeautifulSoup) -> None:
+    script_path = Path(__file__).parent.resolve()
+    purge_file = Path(".jsdelivr.purge")
+
     with open(out, "w") as f:
         fmt = HTMLFormatter(indent=INDENT_LEVEL)
         output = soup.prettify(formatter=fmt)
         f.write(output) # type: ignore
 
     # Write JsDelivr links for JsDelivr cache purge
-    with open(".jsdelivr.purge", "w"):
-        for url in _cdn_links:
-            f.write(f"{url}\n")
+    with open(script_path.joinpath(purge_file), "w") as r:
+        r.write('\n'.join(_cdn_links))
 
 def append_head(soup: BeautifulSoup, tag: Tag) -> None:
     head = soup.find("head")
@@ -176,8 +179,8 @@ def main() -> None:
     parser.add_argument("--output", "-o", default="index.min.html", help="Where to write the compiled HTML")
     parser.add_argument("--github-url", "-gh", help="A github short url from which to pull CSS/JS files from via JSDelivr CDN. If provided, CSS/JS files will be embedded as JSDelivr links")
     parser.add_argument("--local", "-l", action="store_true", help="By default, if the current working directory is in a git repository, CSS/JS files will automatically be converted to JSDelivr links. Enabling this option forces all CSS/JS to be embedded directly")
-    parser.add_argument("--gh-scripts-only", "-So", action="store_true", help="If using JSDelivr, only embed JS files as JSDelivr links, and embed all CSS normally")
-    parser.add_argument("--gh-css-only", "-Co", action="store_true", help="If using JSDelivr, only embed CSS files as JSDelivr links, and embed all JS normally")
+    parser.add_argument("--gh-only-scripts", "-Os", action="store_true", help="If using JSDelivr, only embed JS files as JSDelivr links, and embed all CSS normally")
+    parser.add_argument("--gh-only-css", "-Oc", action="store_true", help="If using JSDelivr, only embed CSS files as JSDelivr links, and embed all JS normally")
 
     args = parser.parse_args()
     
@@ -185,8 +188,8 @@ def main() -> None:
     output = args.output
     github_url = args.github_url
     use_local = args.local
-    scripts_only = args.gh_scripts_only
-    css_only = args.gh_css_only
+    scripts_only = args.gh_only_scripts
+    css_only = args.gh_only_css
     
     # Automatically detect repo
     if in_repo():
