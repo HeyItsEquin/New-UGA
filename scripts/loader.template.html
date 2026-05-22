@@ -51,6 +51,23 @@
 
     <script>
         (async () => {
+            const loadInOrder = async (scripts) => {
+                for (const script of scripts) {
+                    await new Promise((resolve) => {
+                        let scr = document.createElement("script");
+                        if (script.src) {
+                            scr.src = script.src;
+                            scr.onload = resolve;
+                            scr.onerror = resolve;
+                        } else {
+                            scr.textContent = script.textContent;
+                            resolve();
+                        }
+                        document.body.appendChild(scr);
+                    })
+                }
+            }
+
             // Simple loading animation
             setInterval(() => {
                 let loading = document.getElementById("loading-text");
@@ -74,18 +91,13 @@
 
             let parser = new DOMParser();
             let doc = parser.parseFromString(html, "text/html");
+            let scripts = Array.from(doc.querySelectorAll("script"));
+
+            doc.querySelectorAll("script").forEach(script => script.remove());
 
             document.documentElement.innerHTML = doc.documentElement.innerHTML;
 
-            doc.querySelectorAll("script").forEach(script => {
-                let scr = document.createElement("script");
-                if (script.src) {
-                    scr.src = script.src;
-                } else {
-                    scr.textContent = script.textContent;
-                }        
-                document.body.appendChild(scr);
-            });
+            await loadInOrder(scripts);
         })();
     </script>
 </body>
