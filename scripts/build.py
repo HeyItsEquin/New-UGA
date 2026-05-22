@@ -40,6 +40,15 @@ def is_uri(s: str) -> bool:
 def jsdelivr_url(gh: str, file: str, branch: str = "main") -> str:
     return f"https://cdn.jsdelivr.net/gh/{gh}@{branch}/{file}"
 
+def resolve_repo_fp(rp: str) -> str:
+    path = Path(rp)
+    if path.is_absolute():
+        try:
+            return path.relative_to(Path.cwd()).as_posix()
+        except ValueError:
+            return path.as_posix()
+    return path.as_posix()
+
 def resolve_filepath(rp: str) -> str:
     base_dir = Path(_input_path).parent.resolve()
     full = (base_dir / rp).resolve()
@@ -52,12 +61,35 @@ def read_file(fp: str) -> str:
     with open(fp, "r") as f:
         return f.read()
 
-def write_output(out: str, soup: BeautifulSoup) -> None:
+def get_loader_template(base: Path) -> str:
+    tmp = base.joinpath("loader.template.html")
+    with open(tmp, "w") as f:
+        return f.read()
+
+def build_loader(sf_out: str, github_url: Optional[str], out: str) -> None:
+    if sf_out is None or github_url is None:
+        return
+    
+    out_rel = Path(out).resolve()
+    try:
+        out_rel = out_rel.relative_to(Path.cwd()).as_posix()
+    except ValueError:
+        out_rel = out_rel.as_posix()
+        
+    tpl_path = Path(__file__).parent.joinpath("loader.template.html")
+    tpl = tpl_path.read_text()
+    
+    # Replace placeholder tokens in template
+    tpl = tpl.replace("{{CDN_URL}}", "https://cdn.jsdelivr.net/gh")
+    tpl = tpl.replace("{{GITHUB_URL}}", github_url)
+    tpl = tpl.replace("{{GITHUB_BRANCH}}", "main")  # Might try to parse later, for now main is fine
+    tpl = tpl.replace("{{OUTPUT_FILE}}", out_rel)
+    
+    Path(sf_out).write_text(tpl)
+
+def write_output(out: str, ld_out: str, sf_out: str, github_url: Optional[str], soup: BeautifulSoup) -> None:
     script_path = Path(__file__).parent.resolve()
     purge_file = Path(".jsdelivr.purge")
-
-    if out is None:
-        out = resolve_filepath("index.min.html")
 
     with open(out, "w") as f:
         fmt = HTMLFormatter(indent=INDENT_LEVEL)
@@ -67,6 +99,8 @@ def write_output(out: str, soup: BeautifulSoup) -> None:
     # Write JsDelivr links for JsDelivr cache purge
     with open(script_path.joinpath(purge_file), "w") as r:
         r.write('\n'.join(_cdn_links))
+        
+    build_loader(sf_out, github_url, ld_out)
 
 def append_head(soup: BeautifulSoup, tag: Tag) -> None:
     head = soup.find("head")
@@ -194,18 +228,26 @@ def main() -> None:
     parser.add_argument("--local", "-l", action="store_true", help="By default, if the current working directory is in a git repository, CSS/JS files will automatically be converted to JSDelivr links. Enabling this option forces all CSS/JS to be embedded directly")
     parser.add_argument("--gh-only-scripts", "-Os", action="store_true", help="If using JSDelivr, only embed JS files as JSDelivr links, and embed all CSS normally")
     parser.add_argument("--gh-only-css", "-Oc", action="store_true", help="If using JSDelivr, only embed CSS files as JSDelivr links, and embed all JS normally")
+    parser.add_argument("--single-file-out", "-So", help="Where to output the single-file loader for the HTML. Single-file will not be generated if not provided, or if not using JsDelivr")
 
     args = parser.parse_args()
     
     inp_file = args.input
-    output = args.output
     github_url = args.github_url
     use_local = args.local
     scripts_only = args.gh_only_scripts
     css_only = args.gh_only_css
-    
+    sf_out = args.single_file_out
+        
     global _input_path
     _input_path = inp_file
+    
+    default_output = resolve_filepath("index.min.html")
+    output = args.output if args.output is not None else default_output
+    
+    loader_output = output
+    if args.output is not None:
+        loader_output = resolve_repo_fp(output)
     
     print(f"Relative path: {Path(_input_path).parent.resolve()}")
     
@@ -235,7 +277,7 @@ def main() -> None:
     add_css(soup, css_cdn)
     add_scripts(soup, scripts_cdn)
 
-    write_output(output, soup)
+    write_output(output, loader_output, sf_out, github_url, soup)
 
 if __name__ == "__main__":
     main()
