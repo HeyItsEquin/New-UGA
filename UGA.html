@@ -43,40 +43,11 @@
     </div>
 
     <script>
-        const GithubUrl = "HeyItsEquin/New-UGA";
-        const CdnUrl = "https://cdn.jsdelivr.net/gh";
+        (async () => {
+            // Both of these have to exclude trailing slash
+            let _github_url = "HeyItsEquin/New-UGA";
+            let _cdn_url = "https://cdn.jsdelivr.net/gh";
 
-        async function getAssets() {
-            let file = "index.min.html";
-            let fp = `${CdnUrl}/${GithubUrl}/${file}`;
-
-            let res = await fetch(fp);
-            let text = await res.text();
-            return text;
-        }
-        
-        async function load() {
-            let html = await getAssets();
-
-            let parser = new DOMParser();
-            let newDoc = parser.parseFromString(html, "text/html");
-
-            document.documentElement.innerHTML = newDoc.documentElement.innerHTML;
-
-            document.querySelectorAll("script").forEach(script => {
-                let newScript = document.createElement("script");
-                if (script.src) {
-                    newScript.src = script.src;
-                } else {
-                    newScript.textContent = script.textContent;
-                }
-                newScript.async = script.async;
-                newScript.defer = script.defer;
-                document.body.appendChild(newScript);
-            });
-        }
-
-        (() => {
             setInterval(() => {
                 let loading = document.getElementById("loading-text");
                 if (!loading) return;
@@ -90,7 +61,37 @@
 
                 loading.textContent = text;
             }, 200);
-            load();
+
+            // Not necessary for now, but could be useful later
+            let files = [
+                "index.min.html"
+            ];
+
+            let html;
+
+            for (let file of files) {
+                let fp = `${_cdn_url}/${_github_url}@main/${file}`;
+
+                let res = await fetch(fp);
+                let text = await res.text();
+
+                html = text;
+            }
+
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, "text/html");
+
+            document.documentElement.innerHTML = doc.documentElement.innerHTML;
+
+            doc.querySelectorAll("script").forEach(script => {
+                let scr = document.createElement("script");
+                if (script.src) {
+                    scr.src = script.src;
+                } else {
+                    scr.textContent = script.textContent;
+                }        
+                document.body.appendChild(scr);
+            });
         })();
     </script>
 </body>
