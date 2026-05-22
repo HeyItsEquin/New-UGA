@@ -47,7 +47,7 @@
         const CdnUrl = "https://cdn.jsdelivr.net/gh";
 
         async function getAssets() {
-            let file = "index.min.html";
+            let file = "public/index.min.html";
             let fp = `${CdnUrl}/${GithubUrl}/${file}`;
 
             let res = await fetch(fp);
