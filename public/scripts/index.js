@@ -45,7 +45,7 @@ const _downloadDir = "downloads/";
 const GithubUrl = "HeyItsEquin/New-UGA";
 
 // Small helper fn
-String.prototype.removePrefix = function(s) {
+String.prototype.removePrefix = function (s) {
     let pre = this.slice(0, s.length);
     if (pre === s)
         return this.slice(s.length, this.length);
@@ -86,14 +86,14 @@ function getSetting(k) {
     return _settings[k];
 }
 
-function updateSetting(k,v) {
+function updateSetting(k, v) {
     if (!Object.hasOwn(_settings, k)) {
         console.warn(`Failed to apply setting {${k} = ${v}}. ${k} not found`);
         return;
     }
 
     let storageSource = getStorageContext();
-    
+
     let currentSettings = JSON.parse(storageSource.getItem("settings")) || _settings;
     currentSettings[k] = v;
     _settings[k] = v;
@@ -163,7 +163,7 @@ function applySettingsVisuals() {
 function openUrl(id) {
     if (!Object.hasOwn(urls, id))
         return;
-    
+
     openIframe(urls[id]);
 }
 
@@ -274,7 +274,7 @@ function cloakSelf() {
     } catch {
         inFrame = true;
     }
-    if (!inFrame) openCloaked(window.location.href);    
+    if (!inFrame) openCloaked(window.location.href);
 }
 
 function openCloaked(url) {
@@ -299,28 +299,28 @@ function openCloaked(url) {
 
     if (inFrame || !ab) {
         openIframe(url);
+        return;
     }
 
     let popup = open("about:blank", "_blank");
-    setTimeout(() => {
-        if (!popup || popup.closed) {
-            log("Popups are required for UGA self-cloaking. Please enable them :)",
-                LogLevel.Warn, true
-            );
-            return;
-        }
+    if (!popup || popup.closed) {
+        log("Popups are required for UGA self-cloaking. Please enable them :)",
+            LogLevel.Warn, true
+        )
+        return;
+    }
 
-        let doc = popup.document;
-        let iframe = doc.createElement("iframe");
-        let link = doc.createElement("link");
-        doc.title = "My Drive - Google Drive";
-        link.rel = "icon";
-        link.href = "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png";
+    let doc = popup.document;
+    let iframe = doc.createElement("iframe");
+    let link = doc.createElement("link");
+    doc.title = "My Drive - Google Drive";
+    link.rel = "icon";
+    link.href = "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png";
 
-        let toLoad = url ? decodeURIComponent(url) : location.href;
+    let toLoad = url ? decodeURIComponent(url) : location.href;
 
-        iframe.src = toLoad;
-        iframe.style = `
+    iframe.src = toLoad;
+    iframe.style = `
             position: absolute;
             top: 0px;
             left: 0px;
@@ -331,24 +331,23 @@ function openCloaked(url) {
             margin: 0px;
         `;
 
-        doc.head.appendChild(link);
-        doc.body.appendChild(iframe);
+    doc.head.appendChild(link);
+    doc.body.appendChild(iframe);
 
-        let settings = getSettings();
-        if (settings.replace_original == true)
-            location.replace("https://google.com/");
+    let settings = getSettings();
+    if (settings.replace_original == true)
+        location.replace("https://google.com/");
 
-        const script = doc.createElement("script");
-        script.textContent = `
-            window.onbeforeunload = (ev) => {
-                let conf = "Leave Site?";
-                (event || window.event).returnValue = conf;
-                return conf;
-            }
-        `
+    let script = document.createElement("script");
+    script.textContent = `
+        window.onbeforeunload = (ev) => {
+            let conf = "Leave Site?";
+            (event || window.event).returnValue = conf;
+            return conf;
+        }
+    `;
 
-        // doc.body.appendChild(script);
-    }, 500);
+    // doc.body.appendChild(script);
 }
 
 async function downloadFile(rp, use_direct = false) {
@@ -360,7 +359,7 @@ async function downloadFile(rp, use_direct = false) {
         downloadUrl = `https://github.com/${fullPath}`;
     else
         downloadUrl = `https://cdn.jsdelivr.net/gh/${fullPath}`;
-    
+
     let name = getFilename(rp);
 
     let res = await fetch(downloadUrl);
