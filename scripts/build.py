@@ -4,6 +4,7 @@ from typing import Tuple, TypeAlias, Optional
 from argparse import ArgumentParser
 from git import Repo, InvalidGitRepositoryError
 from pathlib import Path
+from enum import IntEnum, StrEnum
 
 INDENT_LEVEL=4
 
@@ -12,6 +13,34 @@ File: TypeAlias = Tuple[str, str]
 _cdn_links = []
 
 _input_path: str = ""
+
+class ColorCode(StrEnum):
+    RST = "\x1b[0m"
+    RED = "\x1b[31m"
+    GREEN = "\x1b[32m"
+    YELLOW = "\x1b[33m"
+    BLUE = "\x1b[34m"
+    PURPLE = "\x1b[35m"
+    CYAN = "\x1b[36m"
+    WHITE = "\x1b[37m"
+    GRAY = "\x1b[90m"
+def color(text: str, color: str) -> str:
+    return f"{color}{text}{ColorCode.RST}"
+
+class LogLevel(IntEnum):
+    Info = 0
+    Warn = 1
+    Error = 2
+def log(lvl: int, msg: str) -> None:
+    match lvl:
+        case LogLevel.Warn:
+            prefix = color("WARN", ColorCode.YELLOW)
+        case LogLevel.Error:
+            prefix = color("ERROR", ColorCode.RED)
+        case _:
+            prefix = color("INFO", ColorCode.CYAN)
+        
+    print(f"[{prefix}] {msg}")
 
 def get_short_url():
     try:
@@ -24,7 +53,7 @@ def get_short_url():
         short_url = url.split("github.com/")[-1].split("github.com:")[-1].replace(".git", "")
         return short_url
     except Exception as e:
-        print(f"Found a Git repo, but failed to origin url: {e}")
+        log(LogLevel.Warn, f"Found git repo, but failed to get origin URL: {e}")
 
 def in_repo() -> bool:
     try:
@@ -58,26 +87,27 @@ def resolve_filepath(rp: str) -> str:
         return full.as_posix()
 
 def read_file(fp: str) -> str:
-    with open(fp, "r") as f:
-        return f.read()
-
-def get_loader_template(base: Path) -> str:
-    tmp = base.joinpath("loader.template.html")
-    with open(tmp, "w") as f:
-        return f.read()
+    try:
+        with open(fp, "r") as f:
+            return f.read()
+    except FileNotFoundError:
+        log(LogLevel.Error, f"Input file not found {color(fp, ColorCode.GRAY)}")
+        return ""
 
 def build_loader(sf_out: str, github_url: Optional[str], out: str) -> None:
     if sf_out is None or github_url is None:
         return
     
     out_rel = Path(out).resolve()
-    try:
-        out_rel = out_rel.relative_to(Path.cwd()).as_posix()
-    except ValueError:
-        out_rel = out_rel.as_posix()
+    out_rel = resolve_repo_fp(str(out_rel))
+    log(LogLevel.Info, f"Generating single-file loader {color(out_rel, ColorCode.GRAY)}")
         
     tpl_path = Path(__file__).parent.joinpath("loader.template.html")
-    tpl = tpl_path.read_text()
+    try:
+        tpl = tpl_path.read_text()
+    except FileNotFoundError:
+        log(LogLevel.Warn, f"Loader template {color(str(tpl_path), ColorCode.GRAY)} not found, loader will not be generated")
+        return
     
     # Replace placeholder tokens in template
     tpl = tpl.replace("{{CDN_URL}}", "https://cdn.jsdelivr.net/gh")
@@ -90,16 +120,29 @@ def build_loader(sf_out: str, github_url: Optional[str], out: str) -> None:
 def write_output(out: str, ld_out: str, sf_out: str, github_url: Optional[str], soup: BeautifulSoup) -> None:
     script_path = Path(__file__).parent.resolve()
     purge_file = Path(".jsdelivr.purge")
-
-    with open(out, "w") as f:
-        fmt = HTMLFormatter(indent=INDENT_LEVEL)
-        output = soup.prettify(formatter=fmt)
-        f.write(output) # type: ignore
-
+    
+    out = Path(out).as_posix()
+    log(LogLevel.Info, f"Writing output {color(out, ColorCode.GRAY)}")
+    try:
+        with open(out, "w") as f:
+            fmt = HTMLFormatter(indent=INDENT_LEVEL)
+            output = soup.prettify(formatter=fmt)
+            f.write(output) # type: ignore
+    except Exception as e:
+        log(LogLevel.Error, f"Failed to write output {color(out, ColorCode.GRAY)}: {e}")
+        return
+    
     # Write JsDelivr links for JsDelivr cache purge
-    with open(script_path.joinpath(purge_file), "w") as r:
-        r.write('\n'.join(_cdn_links))
-        
+    jsd_purge = script_path.joinpath(purge_file)
+    jsd_rel = jsd_purge.relative_to(Path.cwd()).as_posix()
+    
+    log(LogLevel.Info, f"Writing purge URLs {color(jsd_rel, ColorCode.GRAY)}")
+    try:
+        with open(jsd_purge, "w") as r:
+            r.write('\n'.join(_cdn_links))
+    except Exception as e:
+        log(LogLevel.Error, f"Failed to write purge URLs {color(str(jsd_rel), ColorCode.GRAY)}: {e}")
+
     build_loader(sf_out, github_url, ld_out)
 
 def append_head(soup: BeautifulSoup, tag: Tag) -> None:
@@ -127,11 +170,11 @@ def parse_links(soup: BeautifulSoup) -> list[File]:
             contents = read_file(file)
             styles.append((file, contents))
         except FileNotFoundError:
-            print(f"CSS File not found: {file} (does it resolve in your HTML?)")
+            log(LogLevel.Warn, f"Missing stylesheet {color(file, ColorCode.GRAY)}")
         except IsADirectoryError:
-            print(f"Found <link> reference to directory: {file}")
+            log(LogLevel.Warn, f"Expected stylesheet, got directory {color(file, ColorCode.GRAY)}")
         except Exception as e:
-            print(f"Failed to read CSS file: {file} - {e}")
+            log(LogLevel.Warn, f"Failed to load stylesheet {color(file, ColorCode.GRAY)}: {e}")
 
     return styles
 
@@ -153,14 +196,14 @@ def parse_scripts(soup: BeautifulSoup) -> list[File]:
         try:
             contents = read_file(file)
             scripts.append((file, contents))
-            print(f"Found script: {file}")
+            log(LogLevel.Info, f"Loading script {color(file, ColorCode.GRAY)}")
         except FileNotFoundError:
-            print(f"Script file not found: {file} (does it resolve in your HTML?)")
+            log(LogLevel.Warn, f"Missing script {color(file, ColorCode.GRAY)}")
         except IsADirectoryError:
-            print(f"Found <script> reference to directory: {file}")
+            log(LogLevel.Warn, f"Expected script, got stylesheet {color(file, ColorCode.GRAY)}")
         except Exception as e:
-            print(f"Failed to read script file: {file} - {e}")
-
+            log(LogLevel.Warn, f"Failed to load script {color(file, ColorCode.GRAY)}: {e}")
+            
     return scripts
 
 def add_css(soup: BeautifulSoup, jsdelivr_repo: Optional[str] = None) -> None:
@@ -249,19 +292,23 @@ def main() -> None:
     if args.output is not None:
         loader_output = resolve_repo_fp(output)
     
-    print(f"Relative path: {Path(_input_path).parent.resolve()}")
+    rel_path = resolve_repo_fp(str(Path(_input_path).parent.resolve()))
+    log(LogLevel.Info, f"Using asset root {color(rel_path, ColorCode.GRAY)}")
     
     # Automatically detect repo
     if in_repo():
         url = get_short_url()
-        print(f"Found Github repository: {url}")
+        log(LogLevel.Info, f"Using repository {color(str(url), ColorCode.GRAY)}")
         if github_url is None:
             github_url = url
             
     if use_local == True:
         github_url = None
 
+    log(LogLevel.Info, f"Parsing HTML {color(Path(inp_file).as_posix(), ColorCode.GRAY)}")
     html = read_file(inp_file)
+    if html == "":
+        return
     soup = BeautifulSoup(html, "html.parser")
 
     if scripts_only and not css_only:
