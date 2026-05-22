@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <!-- Prevent browser caching -->
+        <meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+        <meta content="no-cache" http-equiv="Pragma"/>
+        <meta content="0" http-equiv="Expires"/>
+        <title>
+            New Tab
+        </title>
+        <link href="https://fonts.googleapis.com" rel="preconnect"/>
+        <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+        <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet"/>
+        <style>
+            /* public/styles/index.css */
+
+            :root {
+                --clr-surface-light: #FFFFFF;
+                --clr-surface-dark: #000000;
+            
+                --clr-surface-0: #000000CC;
+                --clr-surface-1: #323232;
+            
+                --clr-primary-0: #15FF00;
+                --clr-primary-1: #5CFF4E;
+            
+                --clr-shadow-dark: #00000097;
+                --clr-shadow-0: #15FF0097;
+                --clr-shadow-1: #15FF004D;
+            
+                --clr-border-primary: #10B801;
+            }
+            
+            .dbg { border: 1px solid red; }
+            
+            .fnt-audiowide {
+                font-family: "Audiowide", "Segoe UI", Tahoma, sans-serif;
+            }
+            
+            .fill-screen, .fill-parent {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                height: 100vh;
+                width: 100vw;
+            
+                margin: 0px;
+                padding: 0px;
+            }
+            .fill-parent {
+                position: relative;
+                height: 100%;
+                width: 100%;
+            }
+            
+            .stack-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr;
+            }
+            
+            .clickable {
+                cursor: pointer;
+            }
+            
+            .centered {
+                align-self: center;
+                justify-self: center;
+            }
+            
+            #background {
+                background-color: var(--clr-surface-dark);
+                overflow-y: hidden;
+                z-index: -1;
+            }
+            
+            #particles-js.hide {
+                display: none;
+            }
+            
+            #current-time {
+                grid-area: 1/1;
+                align-self: center;
+                justify-self: center;
+            
+                color: var(--clr-surface-light);
+                font-size: 0.8em;
+                margin-top: 3%;
+            }
+            
+            #esc-wrapper {
+                grid-area: 1/1;
+                align-self: start;
+            
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                
+                position: relative;
+                width: 100%;
+                height: 100%;
+            
+                z-index: 100;
+            }
+            #esc-wrapper.hide {
+                display: none;
+            }
+            #esc-buttons {
+                width: 10%;
+                align-self: start;
+            }
+            #esc-region {
+                height: 100%;
+                transform: translateY(-60%);
+                transition: transform 0.1s ease-out;
+            }
+            #esc-region.show-always {
+                transform: translateY(0%);
+            }
+            #esc-btn {
+                align-self: start;
+                margin-bottom: 5%;
+                width: 100%;
+                border-radius: 0px 0px 8px 8px;
+                border: 1px solid var(--clr-surface-1);
+                border-top: none;
+                background-color: rgba(0, 0, 0, 0.9);
+            }
+            #esc-btn p {
+                text-align: center;
+                color: var(--clr-primary-0);
+                font-family: 1.2em;
+                margin-top: 4px;
+                margin-bottom: 4px;
+            }
+            #esc-region:hover {
+                transform: translateY(0%);
+            }
+            
+            #page-title {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            
+                color: var(--clr-primary-0);
+            }
+            #page-title h1 {
+                font-size: 4.8em;
+                margin: 0px;
+                text-shadow: 0 0 20px var(--clr-shadow-0),
+                             0 0 30px var(--clr-shadow-dark);
+                letter-spacing: 2px;
+            }
+            #page-title p {
+                margin: 0px;
+                font-size: 0.8em;
+                text-shadow: 0 0 10px var(--clr-shadow-0);
+            }
+            
+            .top-align-container {
+                display: flex;
+                justify-content: center;
+                align-items: start;
+            }
+            
+            .center-align-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .border-highlight {
+                border: 1.5px solid var(--clr-border-primary);
+                box-shadow: inset 0 0 20px 5px var(--clr-shadow-1);
+            }
+            
+            #page-tabs {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                overflow-y: hidden;
+            }
+            .tab {
+                border-bottom: none;
+                width: 15%;
+                height: 5%;
+                margin: 0px 12px 0px 12px;
+                padding: 1px;
+                text-align: center;
+                background-color: var(--clr-surface-0);
+                transform: translateY(50%);
+                transition: transform 0.1s ease-out;
+            }
+            .tab:hover, .tab.active {
+                transform: translateY(35%);
+            }
+            .tab p {
+                user-select: none;
+                font-size: 0.9em;
+                margin: 0px;
+                margin-bottom: 10%;
+                color: var(--clr-primary-1);
+                text-shadow: 0 0 10px var(--clr-shadow-0);
+            }
+            
+            #content-windows {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                bottom: 2%;
+            }
+            /* Many classes are likely going to use inactive class */
+            [id*="window-"].inactive {
+                display: none;
+            }
+            .tab-window {
+                border-radius: 20px;
+                width: 100%;
+                height: 100%;
+                background-color: var(--clr-surface-0);
+            }
+            
+            /* Classes for windows */
+            .win-header, .win-subheader {
+                font-size: 1.5em;
+                color: var(--clr-primary-0);
+                text-shadow: 0 0 10px var(--clr-shadow-0);
+            }
+            
+            .win-subheader {
+                font-weight: lighter;
+                font-size: 0.8em;
+            }
+            
+            .divider-line {
+                stroke: var(--clr-border-primary);
+                stroke-width: 2;
+            }
+            
+            .win-btn {
+                border-width: 1px;
+                color: var(--clr-primary-1);
+                width: 40%;
+                height: 15%;
+                font-size: 1em;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                background-color: rgba(0, 0, 0, 0);
+                text-shadow: 0 0 10px var(--clr-shadow-0);
+                box-shadow: inset 0 0 10px 3px var(--clr-shadow-1);
+                cursor: pointer;
+            }
+            
+            #downloads-sections {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+                padding: 1em;
+            }
+            
+            .win-section {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .win-btn-stack {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            #info-sections {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .info-section {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            #changelog {
+                background-color: rgba(73, 73, 73, 0.3);
+                text-align: center;
+                outline: none;
+                resize: none;
+                box-shadow: none;
+                color: var(--clr-surface-light);
+                overflow-y: auto;
+                white-space: pre-wrap;
+                font-size: 0.9em;
+                /* user-select: none; */
+            }
+            
+            .option {
+                margin-bottom: 1.5em;
+            }
+            .option .label {
+                display: flex;
+                justify-content: center;
+            }
+            .option .label h1 {
+                color: var(--clr-surface-light);
+                font-size: 0.9em;
+                font-weight: 400;
+                margin: 0px 20px 0px 0px;
+            }
+            .option .label input {
+                accent-color: var(--clr-surface-1);
+                margin: 0px;
+            }
+            .option .info {
+                text-align: center;
+                margin-top: 0px;
+            }
+            
+            #opt-reload, #opt-form {
+                width: 10%;
+                font-size: 0.8em;
+                border: 1px solid var(--clr-surface-light);
+                box-shadow: none;
+                color: var(--clr-surface-light);
+            }
+            
+            #opt-form {
+                height: 30%;
+            }
+            
+            #opt-reload {
+                height: 100%;
+            }
+            
+            .win-btn-link {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            #content-presenter {
+                overflow-y: hidden;
+            }
+            #content-presenter.hidden {
+                display: none;
+            }
+            #content-presenter iframe {
+                width: 100%;
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+                border: none;
+            }
+        </style>
+    </head>
+    <body style="margin: 0px; padding: 0px;">
+        <div class="fill-screen" id="background">
+            <div class="fill-parent" id="particles-js">
+            </div>
+        </div>
+        <div class="fill-screen" style="display: flex; flex-direction: column;">
+            <div id="content-top">
+                <div class="stack-grid">
+                    <p class="fnt-audiowide" id="current-time">
+                        5/15/26
+                    </p>
+                    <div class="hide" id="esc-wrapper">
+                        <div id="esc-buttons">
+                            <div id="esc-region">
+                                <button class="clickable fnt-audiowide" id="esc-btn" onclick="closeIframe()">
+                                    <p>
+                                        Home
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content-main" style="display: flex; flex-grow: 1;">
+                <div class="stack-grid" style="width: 100%;">
+                    <div class="centered" style="grid-area: 1/1; position: relative; bottom: 8%; width: 100%;">
+                        <div id="page-title">
+                            <h1 class="fnt-audiowide">
+                                UGA
+                            </h1>
+                            <p class="fnt-audiowide">
+                                new update every monday
+                            </p>
+                        </div>
+                    </div>
+                    <div class="centered" id="content-windows" style="grid-area: 1/1; width: 80vw; height: 80vh;">
+                        <div class="inactive" id="window-ga-prox" style="width: 100%; height: 100%;">
+                            <div class="tab-window border-highlight">
+                                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                                    <div class="center-align-container">
+                                        <h1 class="win-header fnt-audiowide">
+                                            Gąmes / Pröxies
+                                        </h1>
+                                    </div>
+                                    <div style="flex-grow: 1;">
+                                        <div style="display: flex; justify-content: center; width: 100%; height: 100%;">
+                                            <div style="flex: 1 0 0; padding: 3% 6%;">
+                                                <div style="width: 100%; height: 100%; display: flex; justify-content: space-between;">
+                                                    <button class="win-btn border-highlight fnt-audiowide clickable" onclick="openUrl('selenite')">
+                                                        Selenite
+                                                    </button>
+                                                    <button class="win-btn border-highlight fnt-audiowide clickable" onclick="openUrl('prism')">
+                                                        Vapor (Prism)
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <svg height="100%" width="2px">
+                                                    <line class="divider-line" x1="50%" x2="50%" y1="0%" y2="100%">
+                                                    </line>
+                                                </svg>
+                                            </div>
+                                            <div style="flex: 1 0 0; padding: 3% 6%;">
+                                                <div style="width: 100%; height: 100%; display: flex; justify-content: space-between;">
+                                                    <button class="win-btn border-highlight fnt-audiowide text-shadow clickable" onclick="openUrl('interstellar')">
+                                                        Interstellar
+                                                    </button>
+                                                    <button class="win-btn border-highlight fnt-audiowide text-shadow clickable" onclick="openUrl('frogie')">
+                                                        Frogie's Arcade
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="center-align-container">
+                                        <h1 class="win-subheader fnt-audiowide">
+                                            Broken? Try something else or check out Downloads.
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inactive" id="window-downloads" style="width: 100%; height: 100%;">
+                            <div class="tab-window border-highlight">
+                                <div id="downloads-sections">
+                                    <div class="win-section" id="section-downloads">
+                                        <h1 class="win-header fnt-audiowide" style="padding-top: 1em; font-size: 1.5em;">
+                                            Downloads
+                                        </h1>
+                                        <div class="win-btn-stack">
+                                            <button class="win-btn border-highlight fnt-audiowide" onclick="downloadFile('gnmath/singlefile.html')" style="width: 50%; height: 12%; margin-bottom: 30px;">
+                                                gn-math
+                                            </button>
+                                            <button class="win-btn border-highlight fnt-audiowide" onclick="downloadFile('BSS/BSS.zip')" style="width: 50%; height: 12%;">
+                                                Bee Swarm Simulator
+                                            </button>
+                                            <p class="win-subheader fnt-audiowide" style="margin: 0px;">
+                                                (Unzip and run index.html)
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="win-section" id="section-guides">
+                                        <h1 class="win-header fnt-audiowide" style="padding-top: 1em; font-size: 1.5em;">
+                                            Guides
+                                        </h1>
+                                        <h1 class="win-subheader fnt-audiowide">
+                                            (Probably) Coming soon.
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inactive" id="window-tools" style="width: 40%; height: 100%;">
+                            <div class="tab-window border-highlight fill-parent" style="display: flex; flex-direction: column;">
+                                <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                                    <h1 class="win-subheader fnt-audiowide">
+                                        All we have is cloaxer rn
+                                    </h1>
+                                </div>
+                                <div style="flex-grow: 1; padding: 0em;">
+                                    <div style="display: flex; align-items: center; flex-direction: column;">
+                                        <h1 class="win-header fnt-audiowide" style="font-size: 1.5em;">
+                                            Cloaxer
+                                        </h1>
+                                        <p class="win-subheader fnt-audiowide" style="text-align: center;">
+                                            Cloaxer is for about:blank cloaking tabs.
+                                            <br/>
+                                            This makes them harder to be dyknow(ed)
+                                            <br/>
+                                            and blocked. It works on almost
+                                            <br/>
+                                            everything but products from big
+                                            <br/>
+                                            companies (Google, Microsoft, etc.)
+                                            <br/>
+                                            <br/>
+                                            Instructions: Press the "prompt" button
+                                            <br/>
+                                            below and put in your link (without https://
+                                            <br/>
+                                            prefix)
+                                        </p>
+                                    </div>
+                                </div>
+                                <div style="height: 10%; display: flex; align-items: center; justify-content: center; margin-bottom: 40px;">
+                                    <button class="win-btn border-highlight fnt-audiowide" onclick="cloaxerPrompt()" style="margin: 0px; height: 100%; width: 55%;">
+                                        Prompt
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inactive" id="window-info" style="width: 100%; height: 100%;">
+                            <div class="tab-window border-highlight">
+                                <div class="fill-parent" id="info-sections">
+                                    <div class="info-section">
+                                        <h1 class="win-header fnt-audiowide">
+                                            Info
+                                        </h1>
+                                        <h1 class="win-header fnt-audiowide" style="font-size: 0.9em;">
+                                            v1.1 - 5/11/2026
+                                        </h1>
+                                        <h1 class="win-header fnt-audiowide" style="font-size: 0.9em;">
+                                            Made by
+                                            <a href="https://github.com/ddddd-dbase" style="color: inherit;">
+                                                https://github.com/ddddd-dbase
+                                            </a>
+                                            (UGA dev 2)
+                                        </h1>
+                                        <h1 class="win-header fnt-audiowide" style="font-size: 0.9em;">
+                                            Email:
+                                            <a href="mailto:loverofelpotatos@gmail.com" style="color: inherit;">
+                                                loverofelpotatos@gmail.com
+                                            </a>
+                                        </h1>
+                                        <h1 class="win-header fnt-audiowide" style="font-size: 0.9em;">
+                                            No AI used! :D
+                                        </h1>
+                                    </div>
+                                    <div class="info-section" style="flex-grow: 1; margin-top: 20px;">
+                                        <h1 class="win-header fnt-audiowide">
+                                            Changelog
+                                        </h1>
+                                        <h1 class="win-subheader fnt-audiowide" style="margin-bottom: 0px;">
+                                            Link fixes will not be included
+                                        </h1>
+                                        <div class="fill-parent" style="display: flex; justify-content: center; padding-bottom: 1em;">
+                                            <textarea class="border-highlight fnt-audiowide" id="changelog" readonly="" style="width: 80%;">
+v1.1 - 5/11/2026
+- Particles.js background + toggle for it
+- A bit more info in random places
+- Bee Swarm Simulator downloadable
+- Renamed "Cloaxer" tab to "Tools"
+- You can now click outside tabs to close them (not just clicking on the tab again)
+- Time display
+- Hide home button toggle
+- Moved settings and suggestions into its own tab
+- Minor design changes
+
+v1.0.1 - 5/5/2026
+- Added more info in various places
+- Fixed home button
+
+v1.0 - 5/4/2026
+- Completely revamped UI
+- Update warning added
+- This changelog added
+- Fixed nothing
+
+v0.2 - 4/27/2026
+- Coming soon added
+- Guides (coming soon) added
+- Splash texts added
+- Downloads added
+- Fixed font size on smaller screens
+
+v0.1 - 4/20/2026
+- First version :O
+                                        </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inactive" id="window-settings" style="width: 100%; height: 100%;">
+                            <div class="tab-window border-highlight" style="display: flex; flex-direction: column; align-items: center;">
+                                <h1 class="win-header fnt-audiowide">
+                                    Settings
+                                </h1>
+                                <div class="win-btn-stack" id="opts-stack" style="height: auto;">
+                                    <div class="option" id="opt-auto-cloak">
+                                        <div class="label">
+                                            <h1 class="fnt-audiowide">
+                                                Auto self-cloak on launch
+                                            </h1>
+                                            <input onchange="updateOption('auto_cloak')" type="checkbox"/>
+                                        </div>
+                                        <h1 class="info win-subheader fnt-audiowide">
+                                            (requires popups to be enabled)
+                                        </h1>
+                                    </div>
+                                    <div class="option" id="opt-replace-original">
+                                        <div class="label">
+                                            <h1 class="fnt-audiowide">
+                                                Replace original tab
+                                            </h1>
+                                            <input onchange="updateOption('replace_original')" type="checkbox"/>
+                                        </div>
+                                        <h1 class="info win-subheader fnt-audiowide">
+                                            (Do note that cloaked links will not open in a new tab in cloaked form.)
+                                        </h1>
+                                    </div>
+                                    <div class="option" id="opt-show-home">
+                                        <div class="label">
+                                            <h1 class="fnt-audiowide">
+                                                Always show home button
+                                            </h1>
+                                            <input onchange="updateOption('show_home')" type="checkbox"/>
+                                        </div>
+                                        <h1 class="info win-subheader fnt-audiowide">
+                                            Reload to fix if broken.
+                                        </h1>
+                                    </div>
+                                    <div class="option" id="opt-show-particles">
+                                        <div class="label">
+                                            <h1 class="fnt-audiowide">
+                                                Dynamic background (particles)
+                                            </h1>
+                                            <input onchange="updateOption('show_particles')" type="checkbox"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="height: 8%; width: 100%; display: flex; justify-content: center; padding-top: 10px;">
+                                    <button class="win-btn fnt-audiowide" id="opt-reload" onclick="location.reload()">
+                                        Reload
+                                    </button>
+                                </div>
+                                <div style="flex-grow: 1;">
+                                </div>
+                                <div style="height: 30%; display: flex; flex-direction: column; align-items: center;">
+                                    <h1 class="win-header fnt-audiowide" style="margin-bottom: 0px;">
+                                        Suggestions
+                                    </h1>
+                                    <h1 class="win-subheader fnt-audiowide">
+                                        Got suggestions for UGA? Fill out the form below.
+                                    </h1>
+                                    <button class="win-btn fnt-audiowide" id="opt-form" onclick="openIframe('https://forms.office.com/r/Q1b91AwsJ1')" style="width: 40%;">
+                                        Open Form
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content-bottom">
+                <div class="centered" style="width: 100%">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <div id="page-tabs">
+                            <div class="tab clickable border-highlight fnt-audiowide" id="tab-ga-prox" onclick="makeActive('ga-prox')">
+                                <div class="top-align-container">
+                                    <p>
+                                        Gąmes / Pröxies
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="tab clickable border-highlight fnt-audiowide" id="tab-downloads" onclick="makeActive('downloads')">
+                                <div class="top-align-container">
+                                    <p>
+                                        Downloads / Guides
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="tab clickable border-highlight fnt-audiowide" id="tab-tools" onclick="makeActive('tools')">
+                                <div class="top-align-container">
+                                    <p>
+                                        Tools
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="tab clickable border-highlight fnt-audiowide" id="tab-info" onclick="makeActive('info')">
+                                <div class="top-align-container">
+                                    <p>
+                                        Info
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="tab clickable border-highlight fnt-audiowide" id="tab-settings" onclick="makeActive('settings')">
+                                <div class="top-align-container">
+                                    <p>
+                                        Settings
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fill-screen hidden" id="content-presenter">
+            <iframe>
+            </iframe>
+        </div>
+        <!-- Load particles.js -->
+        <script>
+            // public/scripts/vendor/particles.min.js
+
+            /* -----------------------------------------------
+            /* Author : Vincent Garreau  - vincentgarreau.com
+            /* MIT license: http://opensource.org/licenses/MIT
+            /* GitHub : https://github.com/VincentGarreau/particles.js
+            /* How to use? : Check the GitHub README
+            /* v1.1.0
+            /* ----------------------------------------------- */
+            function launchParticlesJS(e,a){function i(){pJS.fn.canvasInit(),pJS.fn.canvasSize(),pJS.fn.canvasPaint(),pJS.fn.particlesCreate(),pJS.fn.particlesDraw(),pJS.fn.densityAuto()}function t(){pJS.fn.particlesDraw(),pJS.fn.requestAnimFrame=requestAnimFrame(t)}var n=document.querySelector("#"+e+" > canvas");if(pJS={canvas:{el:n,w:n.offsetWidth,h:n.offsetHeight},particles:{color:"#fff",color_random:!1,shape:"circle",opacity:{opacity:1,anim:{enable:!1,speed:2,opacity_min:0,sync:!1}},size:2.5,size_random:!0,nb:200,line_linked:{enable_auto:!0,distance:100,color:"#fff",opacity:1,width:1,condensed_mode:{enable:!1,rotateX:3e3,rotateY:3e3}},anim:{enable:!0,speed:2},array:[]},interactivity:{enable:!0,mouse:{distance:100},detect_on:"canvas",mode:"grab",line_linked:{opacity:1},events:{onclick:{enable:!0,mode:"push",nb:4},onresize:{enable:!0,mode:"out",density_auto:!1,density_area:800}}},retina_detect:!1,fn:{vendors:{interactivity:{}}}},a){if(a.particles){var c=a.particles;if(c.color&&(pJS.particles.color=c.color),c.color_random&&(pJS.particles.color_random=c.color_random),c.shape&&(pJS.particles.shape=c.shape),c.opacity){var s=c.opacity;if(pJS.particles.opacity.opacity="object"==typeof s?s.opacity:s,s.anim){var r=s.anim;0==r.enable&&(pJS.particles.opacity.anim.enable=r.enable),r.speed&&(pJS.particles.opacity.anim.speed=r.speed),r.opacity_min&&(pJS.particles.opacity.anim.opacity_min=r.opacity_min),0==r.sync&&(pJS.particles.opacity.anim.sync=r.sync)}}if(c.size&&(pJS.particles.size=c.size),0==c.size_random&&(pJS.particles.size_random=c.size_random),c.nb&&(pJS.particles.nb=c.nb),c.line_linked){var p=c.line_linked;if(0==p.enable_auto&&(pJS.particles.line_linked.enable_auto=p.enable_auto),p.distance&&(pJS.particles.line_linked.distance=p.distance),p.color&&(pJS.particles.line_linked.color=p.color),p.opacity&&(pJS.particles.line_linked.opacity=p.opacity),p.width&&(pJS.particles.line_linked.width=p.width),p.condensed_mode){var o=p.condensed_mode;0==o.enable&&(pJS.particles.line_linked.condensed_mode.enable=o.enable),o.rotateX&&(pJS.particles.line_linked.condensed_mode.rotateX=o.rotateX),o.rotateY&&(pJS.particles.line_linked.condensed_mode.rotateY=o.rotateY)}}if(c.anim){var l=c.anim;0==l.enable&&(pJS.particles.anim.enable=l.enable),l.speed&&(pJS.particles.anim.speed=l.speed)}}if(a.interactivity){var S=a.interactivity;if(0==S.enable&&(pJS.interactivity.enable=S.enable),S.mouse&&S.mouse.distance&&(pJS.interactivity.mouse.distance=S.mouse.distance),S.detect_on&&(pJS.interactivity.detect_on=S.detect_on),(0==S.mode||S.mode)&&(pJS.interactivity.mode=S.mode),S.line_linked&&S.line_linked.opacity&&(pJS.interactivity.line_linked.opacity=S.line_linked.opacity),S.events){var v=S.events;if(v.onclick){var J=v.onclick;0==J.enable&&(pJS.interactivity.events.onclick.enable=!1),"push"!=J.mode&&(pJS.interactivity.events.onclick.mode=J.mode),J.nb&&(pJS.interactivity.events.onclick.nb=J.nb)}if(v.onresize){var d=v.onresize;0==d.enable&&(pJS.interactivity.events.onresize.enable=!1),d.mode&&(pJS.interactivity.events.onresize.mode=d.mode),(0==d.density_auto||d.density_auto)&&(pJS.interactivity.events.onresize.density_auto=d.density_auto),d.density_area&&(pJS.interactivity.events.onresize.density_area=d.density_area)}}}pJS.retina_detect=a.retina_detect}pJS.particles.color_rgb=hexToRgb(pJS.particles.color),pJS.particles.line_linked.color_rgb_line=hexToRgb(pJS.particles.line_linked.color),pJS.retina_detect&&window.devicePixelRatio>1&&(pJS.retina=!0,pJS.canvas.pxratio=window.devicePixelRatio,pJS.canvas.w=pJS.canvas.el.offsetWidth*pJS.canvas.pxratio,pJS.canvas.h=pJS.canvas.el.offsetHeight*pJS.canvas.pxratio,pJS.particles.anim.speed=pJS.particles.anim.speed*pJS.canvas.pxratio,pJS.particles.line_linked.distance=pJS.particles.line_linked.distance*pJS.canvas.pxratio,pJS.particles.line_linked.width=pJS.particles.line_linked.width*pJS.canvas.pxratio,pJS.interactivity.mouse.distance=pJS.interactivity.mouse.distance*pJS.canvas.pxratio),pJS.fn.canvasInit=function(){pJS.canvas.ctx=pJS.canvas.el.getContext("2d")},pJS.fn.canvasSize=function(){pJS.canvas.el.width=pJS.canvas.w,pJS.canvas.el.height=pJS.canvas.h,window.addEventListener("resize",function(){pJS&&pJS.interactivity.events.onresize.enable&&(pJS.canvas.w=pJS.canvas.el.offsetWidth,pJS.canvas.h=pJS.canvas.el.offsetHeight,pJS.retina&&(pJS.canvas.w*=pJS.canvas.pxratio,pJS.canvas.h*=pJS.canvas.pxratio),pJS.canvas.el.width=pJS.canvas.w,pJS.canvas.el.height=pJS.canvas.h,pJS.fn.canvasPaint(),pJS.particles.anim.enable||(pJS.fn.particlesRemove(),pJS.fn.canvasRemove(),i()),pJS.fn.densityAuto())})},pJS.fn.densityAuto=function(){if(pJS.interactivity.events.onresize.density_auto){var e=pJS.canvas.el.width*pJS.canvas.el.height/1e3;pJS.retina&&(e/=2*pJS.canvas.pxratio);var a=e*pJS.particles.nb/pJS.interactivity.events.onresize.density_area,i=pJS.particles.array.length-a;0>i?pJS.fn.vendors.interactivity.pushParticles(Math.abs(i)):pJS.fn.vendors.interactivity.removeParticles(i)}},pJS.fn.canvasPaint=function(){pJS.canvas.ctx.fillRect(0,0,pJS.canvas.w,pJS.canvas.h)},pJS.fn.canvasRemove=function(){pJS.canvas.ctx.clearRect(0,0,pJS.canvas.w,pJS.canvas.h)},pJS.fn.particle=function(e,a,i){this.x=i?i.x:Math.random()*pJS.canvas.w,this.y=i?i.y:Math.random()*pJS.canvas.h,this.radius=(pJS.particles.size_random?Math.random():1)*pJS.particles.size,pJS.retina&&(this.radius*=pJS.canvas.pxratio),this.color=pJS.particles.color_random?{r:Math.floor(256*Math.random())+0,g:Math.floor(256*Math.random())+0,b:Math.floor(256*Math.random())+0}:e,this.opacity=a,pJS.particles.opacity.anim.enable&&(this.opacity_status=!1,this.vo=pJS.particles.opacity.anim.speed/100,pJS.particles.opacity.anim.sync||(this.vo=this.vo*Math.random())),this.vx=-.5+Math.random(),this.vy=-.5+Math.random()},pJS.fn.particle.prototype.draw=function(){switch(pJS.canvas.ctx.fillStyle="rgba("+this.color.r+","+this.color.g+","+this.color.b+","+this.opacity+")",pJS.canvas.ctx.beginPath(),pJS.particles.shape){case"circle":pJS.canvas.ctx.arc(this.x,this.y,this.radius,0,2*Math.PI,!1);break;case"edge":pJS.canvas.ctx.rect(this.x,this.y,2*this.radius,2*this.radius);break;case"triangle":pJS.canvas.ctx.moveTo(this.x,this.y-this.radius),pJS.canvas.ctx.lineTo(this.x+this.radius,this.y+this.radius),pJS.canvas.ctx.lineTo(this.x-this.radius,this.y+this.radius),pJS.canvas.ctx.closePath()}pJS.canvas.ctx.fill()},pJS.fn.particlesCreate=function(){for(var e=0;e<pJS.particles.nb;e++)pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color_rgb,pJS.particles.opacity.opacity))},pJS.fn.particlesAnimate=function(){for(var e=0;e<pJS.particles.array.length;e++){var a=pJS.particles.array[e];switch(a.x+=a.vx*(pJS.particles.anim.speed/2),a.y+=a.vy*(pJS.particles.anim.speed/2),pJS.particles.opacity.anim.enable&&(1==a.opacity_status?(a.opacity>=pJS.particles.opacity.opacity&&(a.opacity_status=!1),a.opacity+=a.vo):(a.opacity<=pJS.particles.opacity.anim.opacity_min&&(a.opacity_status=!0),a.opacity-=a.vo)),pJS.interactivity.events.onresize.mode){case"bounce":a.x-a.radius>pJS.canvas.w?a.vx=-a.vx:a.x+a.radius<0&&(a.vx=-a.vx),a.y-a.radius>pJS.canvas.h?a.vy=-a.vy:a.y+a.radius<0&&(a.vy=-a.vy);break;case"out":a.x-a.radius>pJS.canvas.w?a.x=a.radius:a.x+a.radius<0&&(a.x=pJS.canvas.w+a.radius),a.y-a.radius>pJS.canvas.h?a.y=a.radius:a.y+a.radius<0&&(a.y=pJS.canvas.h+a.radius)}for(var i=e+1;i<pJS.particles.array.length;i++){var t=pJS.particles.array[i];if(pJS.particles.line_linked.enable_auto&&pJS.fn.vendors.distanceParticles(a,t),pJS.interactivity.enable)switch(pJS.interactivity.mode){case"grab":pJS.fn.vendors.interactivity.grabParticles(a,t)}}}},pJS.fn.particlesDraw=function(){pJS.canvas.ctx.clearRect(0,0,pJS.canvas.w,pJS.canvas.h),pJS.fn.particlesAnimate();for(var e=0;e<pJS.particles.array.length;e++){var a=pJS.particles.array[e];a.draw("rgba("+a.color.r+","+a.color.g+","+a.color.b+","+a.opacity+")")}},pJS.fn.particlesRemove=function(){pJS.particles.array=[]},pJS.fn.vendors.distanceParticles=function(e,a){var i=e.x-a.x,t=e.y-a.y,n=Math.sqrt(i*i+t*t);if(n<=pJS.particles.line_linked.distance){var c=pJS.particles.line_linked.color_rgb_line;if(pJS.canvas.ctx.beginPath(),pJS.canvas.ctx.strokeStyle="rgba("+c.r+","+c.g+","+c.b+","+(pJS.particles.line_linked.opacity-n/pJS.particles.line_linked.distance)+")",pJS.canvas.ctx.moveTo(e.x,e.y),pJS.canvas.ctx.lineTo(a.x,a.y),pJS.canvas.ctx.lineWidth=pJS.particles.line_linked.width,pJS.canvas.ctx.stroke(),pJS.canvas.ctx.closePath(),pJS.particles.line_linked.condensed_mode.enable){var i=e.x-a.x,t=e.y-a.y,s=i/(1e3*pJS.particles.line_linked.condensed_mode.rotateX),r=t/(1e3*pJS.particles.line_linked.condensed_mode.rotateY);a.vx+=s,a.vy+=r}}},pJS.fn.vendors.interactivity.listeners=function(){if("window"==pJS.interactivity.detect_on)var e=window;else var e=pJS.canvas.el;if(e.onmousemove=function(a){if(e==window)var i=a.clientX,t=a.clientY;else var i=a.offsetX||a.clientX,t=a.offsetY||a.clientY;pJS&&(pJS.interactivity.mouse.pos_x=i,pJS.interactivity.mouse.pos_y=t,pJS.retina&&(pJS.interactivity.mouse.pos_x*=pJS.canvas.pxratio,pJS.interactivity.mouse.pos_y*=pJS.canvas.pxratio),pJS.interactivity.status="mousemove")},e.onmouseleave=function(){pJS&&(pJS.interactivity.mouse.pos_x=0,pJS.interactivity.mouse.pos_y=0,pJS.interactivity.status="mouseleave")},pJS.interactivity.events.onclick.enable)switch(pJS.interactivity.events.onclick.mode){case"push":e.onclick=function(){pJS.fn.vendors.interactivity.pushParticles(pJS.interactivity.events.onclick.nb,pJS.interactivity.mouse)};break;case"remove":e.onclick=function(){pJS.fn.vendors.interactivity.removeParticles(pJS.interactivity.events.onclick.nb)}}},pJS.fn.vendors.interactivity.pushParticles=function(e,a){if(pJS)for(var i=0;e>i;i++)pJS.particles.array.push(new pJS.fn.particle(pJS.particles.color_rgb,pJS.particles.opacity.opacity,{x:a?a.pos_x:Math.random()*pJS.canvas.w,y:a?a.pos_y:Math.random()*pJS.canvas.h}))},pJS.fn.vendors.interactivity.removeParticles=function(e){pJS&&pJS.particles.array.splice(0,e)},pJS.fn.vendors.interactivity.grabParticles=function(e,a){var i=e.x-a.x,t=e.y-a.y,n=Math.sqrt(i*i+t*t),c=e.x-pJS.interactivity.mouse.pos_x,s=e.y-pJS.interactivity.mouse.pos_y,r=Math.sqrt(c*c+s*s);if(n<=pJS.particles.line_linked.distance&&r<=pJS.interactivity.mouse.distance&&"mousemove"==pJS.interactivity.status){var p=pJS.particles.line_linked.color_rgb_line;pJS.canvas.ctx.beginPath(),pJS.canvas.ctx.strokeStyle="rgba("+p.r+","+p.g+","+p.b+","+(pJS.interactivity.line_linked.opacity-r/pJS.interactivity.mouse.distance)+")",pJS.canvas.ctx.moveTo(e.x,e.y),pJS.canvas.ctx.lineTo(pJS.interactivity.mouse.pos_x,pJS.interactivity.mouse.pos_y),pJS.canvas.ctx.lineWidth=pJS.particles.line_linked.width,pJS.canvas.ctx.stroke(),pJS.canvas.ctx.closePath()}},pJS.fn.vendors.destroy=function(){cancelAnimationFrame(pJS.fn.requestAnimFrame),n.remove(),pJS=null},i(),pJS.particles.anim.enable&&t(),pJS.interactivity.enable&&pJS.fn.vendors.interactivity.listeners()}function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,function(e,a,i,t){return a+a+i+i+t+t});var i=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(e);return i?{r:parseInt(i[1],16),g:parseInt(i[2],16),b:parseInt(i[3],16)}:null}window.requestAnimFrame=function(){return window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||function(e){window.setTimeout(e,1e3/60)}}(),window.cancelRequestAnimFrame=function(){return window.cancelAnimationFrame||window.webkitCancelRequestAnimationFrame||window.mozCancelRequestAnimationFrame||window.oCancelRequestAnimationFrame||window.msCancelRequestAnimationFrame||clearTimeout}(),window.particlesJS=function(e,a){"string"!=typeof e&&(a=e,e="particles-js"),e||(e="particles-js");var i=document.createElement("canvas");i.style.width="100%",i.style.height="100%";var t=document.getElementById(e).appendChild(i);null!=t&&launchParticlesJS(e,a)};
+        </script>
+        <script>
+            // public/scripts/particles.loader.js
+
+            /* default dom id (particles-js) */
+            //particlesJS();
+            
+            /* config dom id */
+            //particlesJS('dom-id');
+            
+            /* config dom id (optional) + config particles params */
+            particlesJS("particles-js", {
+                particles: {
+                  color: "#fff",
+                  color_random: false,
+                  shape: "circle", // "circle", "edge" or "triangle"
+                  opacity: {
+                    opacity: 0.7,
+                    anim: {
+                      enable: true,
+                      speed: 3,
+                      opacity_min: 0,
+                      sync: false,
+                    },
+                  },
+                  size: 3,
+                  size_random: true,
+                  nb: 140,
+                  line_linked: {
+                    enable_auto: true,
+                    distance: 160,
+                    color: "#fff",
+                    opacity: 0.5,
+                    width: 1,
+                    condensed_mode: {
+                      enable: false,
+                      rotateX: 600,
+                      rotateY: 600,
+                    },
+                  },
+                  anim: {
+                    enable: true,
+                    speed: 2,
+                  },
+                },
+                interactivity: {
+                  enable: true,
+                  mouse: {
+                    distance: 300,
+                  },
+                  detect_on: "window", // "canvas" or "window"
+                  mode: "grab",
+                  line_linked: {
+                    opacity: 0.4,
+                  },
+                  events: {
+                    onclick: {
+                      enable: true,
+                      mode: "push", // "push" or "remove"
+                      nb: 6,
+                    },
+                    onresize: {
+                      enable: true,
+                      mode: "out", // "out" or "bounce"
+                      density_auto: false,
+                      density_area: 400, // nb_particles = particles.nb * (canvas width *  canvas height / 1000) / density_area
+                    },
+                  },
+                },
+                /* Retina Display Support */
+                retina_detect: true,
+            });
+        </script>
+        <script>
+            // public/scripts/index.js
+
+            const windowIds = [
+                "ga-prox", "downloads", "tools", "info", "settings"
+            ];
+            
+            const urls = {
+                "selenite": "https://mail.adriapartners.net",
+                "prism": "https://schoolclassroomcanvacanvacodecom.7879.22web.org/",
+                "interstellar": "https://potato.wwe.ddnss.de",
+                "frogie": "https://mshjvxae.1vib36z.ddnss.de/"
+            }
+            
+            let _activeWindow = "";
+            
+            let _settings = {
+                "auto_cloak": false,
+                "replace_original": false,
+                "show_home": false,
+                "show_particles": true
+            };
+            
+            let initSettingsApplied = false;
+            
+            const LogLevel = {
+                Info: 0,
+                Warn: 1,
+                Error: 2
+            };
+            function log(msg, lvl = 0, display = false) {
+                switch (lvl) {
+                    case 0:
+                        console.log(msg);
+                        break;
+                    case 1:
+                        console.warn(msg);
+                        break;
+                    case 2:
+                        console.error(msg);
+                        break;
+                }
+            
+                if (display) alert(msg);
+            }
+            
+            const _downloadDir = "downloads/";
+            const GithubUrl = "HeyItsEquin/New-UGA";
+            
+            // Small helper fn
+            String.prototype.removePrefix = function(s) {
+                let pre = this.slice(0, s.length);
+                if (pre === s)
+                    return this.slice(s.length, this.length);
+                return this;
+            }
+            
+            function joinPath(p1, p2) {
+                if (p1.endsWith("/")) {
+                    return p1 + p2;
+                } else {
+                    return p1 + "/" + p2;
+                }
+            }
+            
+            function getFilename(fp) {
+                return fp.replace(/^.*[\\/]/, '');
+            }
+            
+            function getStorageContext() {
+                return window.opener ? window.opener.localStorage : localStorage;
+            }
+            
+            function getSettings() {
+                let storageSource = getStorageContext();
+            
+                let settings = JSON.parse(storageSource.getItem("settings"));
+                if (settings == undefined) {
+                    settings = _settings;
+                    storageSource.setItem("settings", JSON.stringify(settings));
+                }
+            
+                return settings;
+            }
+            
+            function getSetting(k) {
+                if (!Object.hasOwn(_settings, k)) return undefined;
+            
+                return _settings[k];
+            }
+            
+            function updateSetting(k,v) {
+                if (!Object.hasOwn(_settings, k)) {
+                    console.warn(`Failed to apply setting {${k} = ${v}}. ${k} not found`);
+                    return;
+                }
+            
+                let storageSource = getStorageContext();
+                
+                let currentSettings = JSON.parse(storageSource.getItem("settings")) || _settings;
+                currentSettings[k] = v;
+                _settings[k] = v;
+            
+                storageSource.setItem("settings", JSON.stringify(currentSettings));
+            
+                applySettings();
+            }
+            
+            function updateOptionElements() {
+                let opts = document.getElementById("opts-stack");
+                if (!opts) return;
+            
+                let settings = getSettings();
+                for (let opt of opts.children) {
+                    if (!opt.classList.contains("option")) continue;
+            
+                    let check = opt.querySelector("input");
+                    let option = opt.id.slice(4, opt.id.length).replaceAll("-", "_");
+            
+                    if (!Object.hasOwn(settings, option)) continue;
+            
+                    // All settings are boolean options for now so this is fine
+                    check.checked = settings[option];
+                }
+            }
+            
+            function updateOption(opt) {
+                let elementId = `opt-${opt.replaceAll("_", "-")}`;
+                let element = document.getElementById(elementId);
+                if (!element) return;
+            
+                let check = element.querySelector("input");
+                if (!check) return;
+                updateSetting(opt, check.checked);
+            }
+            
+            function applySettings() {
+                updateOptionElements();
+                applySettingsVisuals();
+            }
+            
+            function applySettingsVisuals() {
+                let settings = getSettings();
+            
+                if (settings.auto_cloak == true && initSettingsApplied == false) cloakSelf();
+                if (settings.show_home == true) {
+                    let region = document.getElementById("esc-region");
+                    if (!region) return;
+                    region.classList.add("show-always");
+                } else {
+                    let region = document.getElementById("esc-region");
+                    if (!region) return;
+                    region.classList.remove("show-always");
+                }
+                if (settings.show_particles == false) {
+                    let particles = document.getElementById("particles-js");
+                    if (!particles) return;
+                    particles.classList.add("hide");
+                } else {
+                    let particles = document.getElementById("particles-js");
+                    if (!particles) return;
+                    particles.classList.remove("hide");
+                }
+            }
+            
+            function openUrl(id) {
+                if (!Object.hasOwn(urls, id))
+                    return;
+                
+                openIframe(urls[id]);
+            }
+            
+            function openIframe(url) {
+                let presenter = document.getElementById("content-presenter");
+                if (!presenter) return;
+                presenter.classList.remove("hidden");
+            
+                let iframe = presenter.querySelector("iframe");
+                if (!iframe) return;
+                iframe.src = url;
+            
+                let home = document.getElementById("esc-wrapper");
+                if (!home) return;
+                home.classList.remove("hide");
+            
+                return;
+            }
+            
+            function closeIframe() {
+                let presenter = document.getElementById("content-presenter");
+                if (!presenter) return;
+                presenter.classList.add("hidden");
+            
+                let iframe = presenter.querySelector("iframe");
+                if (!iframe) return;
+                iframe.src = "";
+            
+                let home = document.getElementById("esc-wrapper");
+                if (!home) return;
+                home.classList.add("hide");
+            }
+            
+            function setActiveWindow(winId) {
+                let storageSource = getStorageContext();
+                _activeWindow = winId;
+                storageSource.setItem("activeWindow", winId);
+            }
+            
+            function getActiveWindow() {
+                let storageSource = getStorageContext();
+                let active = storageSource.getItem("activeWindow");
+                if (active == undefined) {
+                    active = "";
+                    storageSource.setItem("activeWindow", "");
+                }
+            
+                return active;
+            }
+            
+            function updateWindows() {
+                let active = getActiveWindow();
+                for (const win of windowIds) {
+                    if (active == win) {
+                        toggleWindow(win, true);
+                    } else {
+                        toggleWindow(win, false);
+                    }
+                }
+            }
+            
+            function toggleWindow(id, state) {
+                let winId = `window-${id}`;
+                let tabId = `tab-${id}`;
+            
+                let win = document.getElementById(winId);
+                let tab = document.getElementById(tabId);
+            
+                if (!win || !tab) return;
+            
+                if (state == true) {
+                    win.classList.remove("inactive");
+                    tab.classList.add("active");
+                } else {
+                    win.classList.add("inactive");
+                    tab.classList.remove("active");
+                }
+            }
+            
+            function updateTimeDisplay() {
+                const timeDisplay = document.getElementById("current-time");
+                if (!timeDisplay) return;
+            
+                let currentTime = new Date().toLocaleString();
+            
+                timeDisplay.textContent = currentTime;
+            }
+            
+            function makeActive(winId) {
+                let win = getActiveWindow();
+                if (win == winId) {
+                    setActiveWindow("");
+                } else {
+                    setActiveWindow(winId);
+                }
+                updateWindows();
+            }
+            
+            function cloaxerPrompt() {
+                let url = prompt("Enter URL to be cloaxed");
+                openCloaked(url);
+            }
+            
+            function cloakSelf() {
+                let inFrame;
+                try {
+                    inFrame = (window !== top);
+                } catch {
+                    inFrame = true;
+                }
+                if (!inFrame) openCloaked(window.location.href);    
+            }
+            
+            function openCloaked(url) {
+                if (!URL.canParse(url) || url == "https://null") {
+                    log(
+                        "Improper URL. (ex: https://example.com, example.com)",
+                        LogLevel.Error, true
+                    );
+                }
+            
+                // Whether we're currently in an iframe
+                let inFrame = false;
+                try {
+                    inFrame = (window !== top);
+                } catch {
+                    inFrame = true;
+                }
+            
+                let storageSource = getStorageContext();
+                let ab = storageSource.getItem("ab") || true;
+                storageSource.setItem("ab", ab);
+            
+                if (inFrame || !ab) {
+                    openIframe(url);
+                }
+            
+                let popup = open("about:blank", "_blank");
+                setTimeout(() => {
+                    if (!popup || popup.closed) {
+                        log("Popups are required for UGA self-cloaking. Please enable them :)",
+                            LogLevel.Warn, true
+                        );
+                        return;
+                    }
+            
+                    let doc = popup.document;
+                    let iframe = doc.createElement("iframe");
+                    let link = doc.createElement("link");
+                    doc.title = "My Drive - Google Drive";
+                    link.rel = "icon";
+                    link.href = "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png";
+            
+                    let toLoad = url ? decodeURIComponent(url) : location.href;
+            
+                    iframe.src = toLoad;
+                    iframe.style = `
+                        position: absolute;
+                        top: 0px;
+                        left: 0px;
+                        width: 100vw;
+                        height: 100vh;
+                        border: none;
+                        padding: 0px;
+                        margin: 0px;
+                    `;
+            
+                    doc.head.appendChild(link);
+                    doc.body.appendChild(iframe);
+            
+                    let settings = getSettings();
+                    if (settings.replace_original == true)
+                        location.replace("https://google.com/");
+            
+                    const script = doc.createElement("script");
+                    script.textContent = `
+                        window.onbeforeunload = (ev) => {
+                            let conf = "Leave Site?";
+                            (event || window.event).returnValue = conf;
+                            return conf;
+                        }
+                    `
+            
+                    // doc.body.appendChild(script);
+                }, 500);
+            }
+            
+            async function downloadFile(rp, use_direct = false) {
+                let fp = _downloadDir + rp;
+                let downloadUrl = "";
+                let fullPath = joinPath(GithubUrl, fp);
+            
+                if (use_direct)
+                    downloadUrl = `https://github.com/${fullPath}`;
+                else
+                    downloadUrl = `https://cdn.jsdelivr.net/gh/${fullPath}`;
+                
+                let name = getFilename(rp);
+            
+                let res = await fetch(downloadUrl);
+                let blob = await res.blob();
+                let link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = name;
+                link.click();
+            }
+            
+            (() => {
+                setInterval(updateTimeDisplay, 100);
+                _activeWindow = getActiveWindow();
+                updateWindows();
+                applySettings();
+                initSettingsApplied = true;
+            })();
+        </script>
+    </body>
+</html>
