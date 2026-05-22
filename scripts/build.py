@@ -11,6 +11,8 @@ File: TypeAlias = Tuple[str, str]
 
 _cdn_links = []
 
+_input_path: str = ""
+
 def get_short_url():
     try:
         repo = Repo(".")
@@ -38,6 +40,14 @@ def is_uri(s: str) -> bool:
 def jsdelivr_url(gh: str, file: str, branch: str = "main") -> str:
     return f"https://cdn.jsdelivr.net/gh/{gh}@{branch}/{file}"
 
+def resolve_filepath(rp: str) -> str:
+    base_dir = Path(_input_path).parent.resolve()
+    full = (base_dir / rp).resolve()
+    try:
+        return full.relative_to(Path.cwd()).as_posix()
+    except ValueError:
+        return full.as_posix()
+
 def read_file(fp: str) -> str:
     with open(fp, "r") as f:
         return f.read()
@@ -45,6 +55,9 @@ def read_file(fp: str) -> str:
 def write_output(out: str, soup: BeautifulSoup) -> None:
     script_path = Path(__file__).parent.resolve()
     purge_file = Path(".jsdelivr.purge")
+
+    if out is None:
+        out = resolve_filepath("index.min.html")
 
     with open(out, "w") as f:
         fmt = HTMLFormatter(indent=INDENT_LEVEL)
@@ -70,7 +83,7 @@ def parse_links(soup: BeautifulSoup) -> list[File]:
             if href:
                 # Do not try to embed remote stylesheets
                 if not is_uri(href):
-                    css_files.append(href)
+                    css_files.append(resolve_filepath(href))
                     link.decompose()
     
     styles = []
@@ -97,7 +110,7 @@ def parse_scripts(soup: BeautifulSoup) -> list[File]:
             if src:
                 # Make sure src is reference to file
                 if not is_uri(src):
-                    js_files.append(src)
+                    js_files.append(resolve_filepath(src))
                     script.decompose()
 
     scripts = []
@@ -176,7 +189,7 @@ def add_scripts(soup: BeautifulSoup, jsdelivr_repo: Optional[str] = None) -> Non
 def main() -> None:
     parser = ArgumentParser()
     parser.add_argument("input", help="Filepath of the HTML file to use as a basis for compilation")
-    parser.add_argument("--output", "-o", default="index.min.html", help="Where to write the compiled HTML")
+    parser.add_argument("--output", "-o", help="Where to write the compiled HTML")
     parser.add_argument("--github-url", "-gh", help="A github short url from which to pull CSS/JS files from via JSDelivr CDN. If provided, CSS/JS files will be embedded as JSDelivr links")
     parser.add_argument("--local", "-l", action="store_true", help="By default, if the current working directory is in a git repository, CSS/JS files will automatically be converted to JSDelivr links. Enabling this option forces all CSS/JS to be embedded directly")
     parser.add_argument("--gh-only-scripts", "-Os", action="store_true", help="If using JSDelivr, only embed JS files as JSDelivr links, and embed all CSS normally")
@@ -190,6 +203,11 @@ def main() -> None:
     use_local = args.local
     scripts_only = args.gh_only_scripts
     css_only = args.gh_only_css
+    
+    global _input_path
+    _input_path = inp_file
+    
+    print(f"Relative path: {Path(_input_path).parent.resolve()}")
     
     # Automatically detect repo
     if in_repo():
