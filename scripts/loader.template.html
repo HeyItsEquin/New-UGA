@@ -49,6 +49,26 @@
         <h3>You shouldn't be here long (Reload the page & check your connection if it's stuck)</h3>
     </div>
 
+    <!-- Loading animation -->
+    <script>
+        let loadUpdateMs = 200;
+        let loadInterval;
+
+        loadInterval = setInterval(() => {
+            let loading = document.getElementById("loading-text");
+            if (!loading) return;
+
+            let text = loading.textContent;
+            if (text.endsWith("...")) {
+                text = "Loading";
+            } else {
+                text += ".";
+            }
+        }, loadUpdateMs);
+    </script>
+
+    <!-- !DO NOT CHANGE THIS! -->
+    <!-- !THIS SCRIPT IS REQUIRED TO LOAD THE MAIN SITE! -->
     <script>
         (async () => {
             const loadInOrder = async (scripts) => {
@@ -68,21 +88,6 @@
                 }
             }
 
-            // Simple loading animation
-            setInterval(() => {
-                let loading = document.getElementById("loading-text");
-                if (!loading) return;
-
-                let text = loading.textContent;
-                if (text === "Loading...") {
-                    text = "Loading";
-                } else {
-                    text += ".";
-                }
-
-                loading.textContent = text;
-            }, 200);
-
             let fp = `${window._CDN_URL}/${window._GITHUB_URL}@${window._GITHUB_BRANCH}/${window._OUTPUT_FILE}`;
 
             let res = await fetch(fp);
@@ -97,6 +102,7 @@
 
             document.documentElement.innerHTML = doc.documentElement.innerHTML;
 
+            // Necessary for scripts to load properly
             await loadInOrder(scripts);
         })();
     </script>
