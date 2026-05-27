@@ -165,29 +165,52 @@
 #window-downloads .tab-window {
     display: flex;
     box-sizing: border-box;
-    padding: 1em;
+    padding: 2em;
 }
 
 #section-downloads,
 #section-guides {
-    flex-grow: 1;
+    /* flex-grow: 1; */
+    width: 50%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    .win-header {
-        font-size: 1.5em;
-    }
+}
+#section-downloads .win-header,
+#section-guides .win-header {
+    font-size: 1.5em;
 }
 
 #section-downloads .downloads {
+    margin-top: 1em;
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: auto;
+    gap: 1.5em;
 }
 
 #section-downloads .downloads .btn {
     padding: 1em 8em;
+}
+#section-downloads .downloads .btn p {
+    font-size: 1.2em;
+    text-shadow: 0 0 10px var(--clr-shadow-0);
+}
+
+#section-downloads .downloads .has-label {
+    position: relative;
+}
+#section-downloads .downloads .has-label p.anchor {
+    position: absolute;
+    top: 100%;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    font-family: var(--font-primary);
+    color: var(--clr-primary-0);
+    font-size: 0.85em;
+    text-shadow: 0 0 10px var(--clr-shadow-0);
 }
 
 .dbg { border: 1px solid red; }
