@@ -139,7 +139,7 @@
 
 .ga-prox-btns div {
     display: grid;
-    padding: 3em;
+    padding: 1em 3em;
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: auto;
     gap: 2em;
@@ -159,6 +159,35 @@
 .ga-prox-btns .separator line {
     stroke: var(--clr-border-primary);
     stroke-width: 2;
+}
+
+
+#window-downloads .tab-window {
+    display: flex;
+    box-sizing: border-box;
+    padding: 1em;
+}
+
+#section-downloads,
+#section-guides {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .win-header {
+        font-size: 1.5em;
+    }
+}
+
+#section-downloads .downloads {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+}
+
+#section-downloads .downloads .btn {
+    padding: 1em 8em;
 }
 
 .dbg { border: 1px solid red; }
