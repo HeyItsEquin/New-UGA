@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/index.css">
 </head>
+
 <body style="margin: 0px; padding: 0px;">
     <div id="background" class="fill-screen">
         <div id="particles-js" class="fill-parent"></div>
@@ -38,78 +39,70 @@
             <div id="main-stack">
                 <section id="title-wrapper" class="centered">
                     <div id="page-title">
-                        <h1 class="fnt-audiowide">UGA</h1>
-                        <p class="fnt-audiowide">new update every monday</p>
+                        <h1>UGA</h1>
+                        <p id="splash-text">new update every monday</p>
                     </div>
                 </section>
                 <section id="content-windows" class="centered">
-                    <div id="window-ga-prox" class="inactive" style="width: 100%; height: 100%;">
-                        <div class="tab-window border-highlight">
-                            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
-                                <div class="center-align-container">
-                                    <h1 class="win-header fnt-audiowide">Gąmes / Pröxies</h1>
+                    <div id="window-ga-prox" class="inactive">
+                        <div class="tab-window">
+                            <h1 class="win-header">Gąmes / Pröxies</h1>
+                            <div class="ga-prox-btns">
+                                <div class="left">
+                                    <button class="btn" onclick="openUrl('selenite')">
+                                        <p>Selenite</p>
+                                    </button>
+                                    <button class="btn" onclick="openUrl('prism')">
+                                        <p>Vapor (Prism)</p>
+                                    </button>
                                 </div>
-                                <div style="flex-grow: 1;">
-                                    <div style="display: flex; justify-content: center; width: 100%; height: 100%;">
-                                        <div style="flex: 1 0 0; padding: 3% 6%;">
-                                            <div style="width: 100%; height: 100%; display: flex; justify-content: space-between;">
-                                                <button class="win-btn border-highlight fnt-audiowide clickable" onclick="openUrl('selenite')">
-                                                    Selenite
-                                                </button>
-                                                <button class="win-btn border-highlight fnt-audiowide clickable" onclick="openUrl('prism')">
-                                                    Vapor (Prism)
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <svg height="100%" width="2px">
-                                                <line class="divider-line" x1="50%" y1="0%" x2="50%" y2="100%">
-                                            </svg>
-                                        </div>
-                                        <div style="flex: 1 0 0; padding: 3% 6%;">
-                                            <div style="width: 100%; height: 100%; display: flex; justify-content: space-between;">
-                                                <button class="win-btn border-highlight fnt-audiowide text-shadow clickable" onclick="openUrl('interstellar')">
-                                                    Interstellar
-                                                </button>
-                                                <button class="win-btn border-highlight fnt-audiowide text-shadow clickable" onclick="openUrl('frogie')">
-                                                    Frogie's Arcade
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="center-align-container">
-                                    <h1 class="win-subheader fnt-audiowide">Broken? Try something else or check out Downloads.</h1>
+                                <svg class="separator">
+                                    <line x1="50%" y1="0%" x2="50%" y2="100%">
+                                </svg>
+                                <div class="right">
+                                    <button class="btn" onclick="openUrl('interstellar')">
+                                        <p>Interstellar</p>
+                                    </button>
+                                    <button class="btn" onclick="openUrl('frogie')">
+                                        <p>Frogie's Arcade</p>
+                                    </button>
                                 </div>
                             </div>
+                            <h1 class="win-subheader">
+                                Broken? Try something else or check out Downloads.
+                            </h1>
                         </div>
                     </div>
-                    <div id="window-downloads" class="inactive" style="width: 100%; height: 100%;">
-                        <div class="tab-window border-highlight">
+                    <div id="window-downloads" class="inactive">
+                        <div class="tab-window">
                             <div id="downloads-sections">
                                 <div id="section-downloads" class="win-section">
-                                    <h1 class="win-header fnt-audiowide" style="padding-top: 1em; font-size: 1.5em;">Downloads</h1>
+                                    <h1 class="win-header fnt-audiowide" style="padding-top: 1em; font-size: 1.5em;">
+                                        Downloads</h1>
                                     <div class="win-btn-stack">
-                                        <button class="win-btn border-highlight fnt-audiowide" style="width: 50%; height: 12%; margin-bottom: 30px;"
-                                                onclick="downloadFile('gnmath/singlefile.html')">
+                                        <button class="win-btn border-highlight fnt-audiowide"
+                                            style="width: 50%; height: 12%; margin-bottom: 30px;"
+                                            onclick="downloadFile('gnmath/singlefile.html')">
                                             gn-math
                                         </button>
-                                        <button class="win-btn border-highlight fnt-audiowide" style="width: 50%; height: 12%;"
-                                                onclick="downloadFile('BSS/BSS.zip')">
+                                        <button class="win-btn border-highlight fnt-audiowide"
+                                            style="width: 50%; height: 12%;" onclick="downloadFile('BSS/BSS.zip')">
                                             Bee Swarm Simulator
                                         </button>
-                                        <p class="win-subheader fnt-audiowide" style="margin: 0px;">(Unzip and run index.html)</p>
+                                        <p class="win-subheader fnt-audiowide" style="margin: 0px;">(Unzip and run
+                                            index.html)</p>
                                     </div>
                                 </div>
                                 <div id="section-guides" class="win-section">
-                                    <h1 class="win-header fnt-audiowide" style="padding-top: 1em; font-size: 1.5em;">Guides</h1>
+                                    <h1 class="win-header fnt-audiowide" style="padding-top: 1em; font-size: 1.5em;">
+                                        Guides</h1>
                                     <h1 class="win-subheader fnt-audiowide">(Probably) Coming soon.</h1>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="window-tools" class="inactive" style="width: 40%; height: 100%;">
-                        <div class="tab-window border-highlight fill-parent" style="display: flex; flex-direction: column;">
+                    <div id="window-tools" class="inactive">
+                        <div class="tab-window fill-parent" style="display: flex; flex-direction: column;">
                             <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
                                 <h1 class="win-subheader fnt-audiowide">All we have is cloaxer rn</h1>
                             </div>
@@ -129,25 +122,28 @@
                                     </p>
                                 </div>
                             </div>
-                            <div style="height: 10%; display: flex; align-items: center; justify-content: center; margin-bottom: 40px;">
-                                <button class="win-btn border-highlight fnt-audiowide" style="margin: 0px; height: 100%; width: 55%;"
-                                        onclick="cloaxerPrompt()">
+                            <div
+                                style="height: 10%; display: flex; align-items: center; justify-content: center; margin-bottom: 40px;">
+                                <button class="win-btn border-highlight fnt-audiowide"
+                                    style="margin: 0px; height: 100%; width: 55%;" onclick="cloaxerPrompt()">
                                     Prompt
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div id="window-info" class="inactive" style="width: 100%; height: 100%;">
-                        <div class="tab-window border-highlight">
+                    <div id="window-info" class="inactive">
+                        <div class="tab-window">
                             <div id="info-sections" class="fill-parent">
                                 <div class="info-section">
                                     <h1 class="win-header fnt-audiowide">Info</h1>
                                     <h1 class="win-header fnt-audiowide" style="font-size: 0.9em;">v1.1 - 5/11/2026</h1>
                                     <h1 class="win-header fnt-audiowide" style="font-size: 0.9em;">
-                                        Made by <a href="https://github.com/ddddd-dbase" style="color: inherit;">https://github.com/ddddd-dbase</a> (UGA dev 2)
+                                        Made by <a href="https://github.com/ddddd-dbase"
+                                            style="color: inherit;">https://github.com/ddddd-dbase</a> (UGA dev 2)
                                     </h1>
                                     <h1 class="win-header fnt-audiowide" style="font-size: 0.9em;">
-                                        Email: <a href="mailto:loverofelpotatos@gmail.com" style="color: inherit;">loverofelpotatos@gmail.com</a>
+                                        Email: <a href="mailto:loverofelpotatos@gmail.com"
+                                            style="color: inherit;">loverofelpotatos@gmail.com</a>
                                     </h1>
                                     <h1 class="win-header fnt-audiowide" style="font-size: 0.9em;">
                                         No AI used! :D
@@ -155,9 +151,12 @@
                                 </div>
                                 <div class="info-section" style="flex-grow: 1; margin-top: 20px;">
                                     <h1 class="win-header fnt-audiowide">Changelog</h1>
-                                    <h1 class="win-subheader fnt-audiowide" style="margin-bottom: 0px;">Link fixes will not be included</h1>
-                                    <div class="fill-parent" style="display: flex; justify-content: center; padding-bottom: 1em;">
-                                        <textarea readonly id="changelog" class="border-highlight fnt-audiowide" style="width: 80%;">
+                                    <h1 class="win-subheader fnt-audiowide" style="margin-bottom: 0px;">Link fixes will
+                                        not be included</h1>
+                                    <div class="fill-parent"
+                                        style="display: flex; justify-content: center; padding-bottom: 1em;">
+                                        <textarea readonly id="changelog" class="border-highlight fnt-audiowide"
+                                            style="width: 80%;">
 v1.1 - 5/11/2026
 - Particles.js background + toggle for it
 - A bit more info in random places
@@ -194,8 +193,8 @@ v0.1 - 4/20/2026
                             </div>
                         </div>
                     </div>
-                    <div id="window-settings" class="inactive" style="width: 100%; height: 100%;">
-                        <div class="tab-window border-highlight" style="display: flex; flex-direction: column; align-items: center;">
+                    <div id="window-settings" class="inactive">
+                        <div class="tab-window" style="display: flex; flex-direction: column; align-items: center;">
                             <h1 class="win-header fnt-audiowide">Settings</h1>
                             <div id="opts-stack" class="win-btn-stack" style="height: auto;">
                                 <div class="option" id="opt-auto-cloak">
@@ -203,14 +202,15 @@ v0.1 - 4/20/2026
                                         <h1 class="fnt-audiowide">Auto self-cloak on launch</h1>
                                         <input type="checkbox" onchange="updateOption('auto_cloak')">
                                     </div>
-                                    <h1 class="info win-subheader fnt-audiowide">(requires popups to be enabled)</h1> 
+                                    <h1 class="info win-subheader fnt-audiowide">(requires popups to be enabled)</h1>
                                 </div>
                                 <div class="option" id="opt-replace-original">
                                     <div class="label">
                                         <h1 class="fnt-audiowide">Replace original tab</h1>
                                         <input type="checkbox" onchange="updateOption('replace_original')">
                                     </div>
-                                    <h1 class="info win-subheader fnt-audiowide">(Do note that cloaked links will not open in a new tab in cloaked form.)</h1>
+                                    <h1 class="info win-subheader fnt-audiowide">(Do note that cloaked links will not
+                                        open in a new tab in cloaked form.)</h1>
                                 </div>
                                 <div class="option" id="opt-show-home">
                                     <div class="label">
@@ -226,7 +226,8 @@ v0.1 - 4/20/2026
                                     </div>
                                 </div>
                             </div>
-                            <div style="height: 8%; width: 100%; display: flex; justify-content: center; padding-top: 10px;">
+                            <div
+                                style="height: 8%; width: 100%; display: flex; justify-content: center; padding-top: 10px;">
                                 <button id="opt-reload" class="win-btn fnt-audiowide" onclick="location.reload()">
                                     Reload
                                 </button>
@@ -238,7 +239,7 @@ v0.1 - 4/20/2026
                                     Got suggestions for UGA? Fill out the form below.
                                 </h1>
                                 <button id="opt-form" class="win-btn fnt-audiowide" style="width: 40%;"
-                                        onclick="openIframe('https://forms.office.com/r/Q1b91AwsJ1')">
+                                    onclick="openIframe('https://forms.office.com/r/Q1b91AwsJ1')">
                                     Open Form
                                 </button>
                             </div>
@@ -280,4 +281,5 @@ v0.1 - 4/20/2026
 
     <script defer src="scripts/index.js"></script>
 </body>
+
 </html>

@@ -51,6 +51,9 @@
     border: 1.5px solid var(--clr-border-primary);
     box-shadow: inset 0 0 20px 5px var(--clr-shadow-1);
     min-width: 0;
+    background-color: var(--clr-surface-0);
+    font-family: var(--font-primary);
+    color: var(--clr-primary-1);
 }
 .btn p {
     user-select: none;
@@ -58,7 +61,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0;
-    font-family: var(--font-primary);
 }
 
 #tab-buttons {
@@ -99,6 +101,64 @@
     text-shadow: 0 0 10px var(--clr-shadow-0);
     font-size: 0.85em;
     align-self: flex-start;
+}
+
+#content-windows [id*="window-"] {
+    width: 100%;
+    height: 100%;
+}
+
+#window-tools {
+    width: 40%;
+}
+
+.tab-window {
+    border: 1.5px solid var(--clr-border-primary);
+    box-shadow: inset 0 0 20px 5px var(--clr-shadow-1);
+}
+
+/* TAB/CONTENT WINDOWS */
+
+#window-ga-prox .tab-window {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+#window-ga-prox .tab-window .win-header,
+#window-ga-prox .tab-window .win-subheader {
+    width: 100%;
+    text-align: center;
+}
+
+.ga-prox-btns {
+    flex-grow: 1;
+    display: flex;
+}
+
+.ga-prox-btns div {
+    display: grid;
+    padding: 3em;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto;
+    gap: 2em;
+    align-content: start;
+    flex: 1;
+}
+
+.ga-prox-btns .btn {
+    text-align: center;
+    padding: 0.8em 2em;
+}
+
+.ga-prox-btns .separator {
+    height: 100%;
+    width: 2px;
+}
+.ga-prox-btns .separator line {
+    stroke: var(--clr-border-primary);
+    stroke-width: 2;
 }
 
 .dbg { border: 1px solid red; }
@@ -215,6 +275,7 @@
     color: var(--clr-primary-0);
 }
 #page-title h1 {
+    font-family: var(--font-primary);
     font-size: 5em;
     margin: 0px;
     text-shadow: 0 0 20px var(--clr-shadow-0),
@@ -222,6 +283,7 @@
     letter-spacing: 2px;
 }
 #page-title p {
+    font-family: var(--font-primary);
     margin: 0px;
     font-size: 0.8rem;
     text-shadow: 0 0 10px var(--clr-shadow-0);
@@ -268,6 +330,7 @@
 
 /* Classes for windows */
 .win-header, .win-subheader {
+    font-family: var(--font-primary);
     font-size: 1.5em;
     color: var(--clr-primary-0);
     text-shadow: 0 0 10px var(--clr-shadow-0);
