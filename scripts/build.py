@@ -117,7 +117,7 @@ def build_loader(sf_out: str, github_url: Optional[str], out: str) -> None:
     
     Path(sf_out).write_text(tpl)
 
-def write_output(out: str, ld_out: str, sf_out: str, github_url: Optional[str], soup: BeautifulSoup) -> None:
+def write_output(out: str, ld_out: str, sf_out: str, github_url: Optional[str], no_purge: bool, soup: BeautifulSoup) -> None:
     script_path = Path(__file__).parent.resolve()
     purge_file = Path(".jsdelivr.purge")
     
@@ -135,15 +135,16 @@ def write_output(out: str, ld_out: str, sf_out: str, github_url: Optional[str], 
         return
     
     # Write JsDelivr links for JsDelivr cache purge
-    jsd_purge = script_path.joinpath(purge_file)
-    jsd_rel = jsd_purge.relative_to(Path.cwd()).as_posix()
-    
-    log(LogLevel.Info, f"Writing purge URLs {color(jsd_rel, ColorCode.GRAY)}")
-    try:
-        with open(jsd_purge, "w") as r:
-            r.write('\n'.join(_cdn_links))
-    except Exception as e:
-        log(LogLevel.Error, f"Failed to write purge URLs {color(str(jsd_rel), ColorCode.GRAY)}: {e}")
+    if no_purge == False:
+        jsd_purge = script_path.joinpath(purge_file)
+        jsd_rel = jsd_purge.relative_to(Path.cwd()).as_posix()
+
+        log(LogLevel.Info, f"Writing purge URLs {color(jsd_rel, ColorCode.GRAY)}")
+        try:
+            with open(jsd_purge, "w") as r:
+                r.write('\n'.join(_cdn_links))
+        except Exception as e:
+            log(LogLevel.Error, f"Failed to write purge URLs {color(str(jsd_rel), ColorCode.GRAY)}: {e}")
 
     build_loader(sf_out, github_url, ld_out)
 
@@ -274,6 +275,7 @@ def main() -> None:
     parser.add_argument("--gh-only-scripts", "-Os", action="store_true", help="If using JSDelivr, only embed JS files as JSDelivr links, and embed all CSS normally")
     parser.add_argument("--gh-only-css", "-Oc", action="store_true", help="If using JSDelivr, only embed CSS files as JSDelivr links, and embed all JS normally")
     parser.add_argument("--single-file-out", "-So", help="Where to output the single-file loader for the HTML. Single-file will not be generated if not provided, or if not using JsDelivr")
+    parser.add_argument("--no-purge", "-np", action="store_true", help="Do not generate a .jsdelivr.purge file")
 
     args = parser.parse_args()
     
@@ -283,6 +285,7 @@ def main() -> None:
     scripts_only = args.gh_only_scripts
     css_only = args.gh_only_css
     sf_out = args.single_file_out
+    no_purge = args.no_purge
         
     global _input_path
     _input_path = inp_file
@@ -327,7 +330,7 @@ def main() -> None:
     add_css(soup, css_cdn)
     add_scripts(soup, scripts_cdn)
 
-    write_output(output, loader_output, sf_out, github_url, soup)
+    write_output(output, loader_output, sf_out, github_url, no_purge, soup)
 
 if __name__ == "__main__":
     main()
