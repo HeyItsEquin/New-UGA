@@ -121,7 +121,9 @@ def write_output(out: str, ld_out: str, sf_out: str, github_url: Optional[str], 
     script_path = Path(__file__).parent.resolve()
     purge_file = Path(".jsdelivr.purge")
     
-    out = Path(out).as_posix()
+    out_path = Path(out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out = out_path.as_posix()
     log(LogLevel.Info, f"Writing output {color(out, ColorCode.GRAY)}")
     try:
         with open(out, "w") as f:
@@ -292,6 +294,7 @@ def main() -> None:
     if args.output is not None:
         loader_output = resolve_repo_fp(output)
     
+    # I know this is ugly, no need to let me know
     rel_path = resolve_repo_fp(str(Path(_input_path).parent.resolve()))
     log(LogLevel.Info, f"Using asset root {color(rel_path, ColorCode.GRAY)}")
     
