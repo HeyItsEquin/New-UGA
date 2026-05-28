@@ -168,6 +168,7 @@
     stroke-width: 2;
 }
 
+
 #window-downloads .tab-window {
     display: flex;
     box-sizing: border-box;
@@ -291,13 +292,13 @@
     flex-direction: column;
     overflow-y: auto;
 }
-#window-info section.changelog h1.win-header {
+.changelog h1.win-header {
     margin-bottom: 0;
 }
-#window-info section.changelog h2.win-subheader {
+.changelog h2.win-subheader {
     margin-top: 0;
 }
-#window-info section.changelog article {
+.changelog article {
     flex-grow: 1;
     border: 1.5px solid var(--clr-border-primary);
     background-color: rgba(73, 73, 73, 0.3);
@@ -316,6 +317,13 @@
 }
 .changelog article li::marker {
     content: "- ";
+}
+
+
+#window-settings .tab-window {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .dbg { border: 1px solid red; }
