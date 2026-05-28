@@ -108,10 +108,6 @@
     height: 100%;
 }
 
-#window-tools {
-    width: 40%;
-}
-
 .tab-window {
     border: 1.5px solid var(--clr-border-primary);
     box-shadow: inset 0 0 20px 5px var(--clr-shadow-1);
@@ -202,6 +198,7 @@
 
 #section-downloads .downloads .btn {
     padding: 1em 8em;
+    min-width: 0;
 }
 #section-downloads .downloads .btn p {
     font-size: 1.2em;
@@ -221,6 +218,48 @@
     color: var(--clr-primary-0);
     font-size: 0.85em;
     text-shadow: 0 0 10px var(--clr-shadow-0);
+}
+
+/* Yes I know !important is evil but it works here */
+#window-tools {
+    width: 40% !important;
+}
+#window-tools .tab-window {
+    display: flex;
+    flex-direction: column;
+}
+
+#window-tools .win-subheader {
+    width: 100%;
+    text-align: center;
+}
+
+#window-tools section {
+    flex-grow: 1;
+    padding: 0em 4em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#window-tools section .win-header {
+    font-size: 1.5em;
+}
+#window-tools section .win-subheader {
+    text-align: center;
+}
+
+#window-tools footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3em;
+}
+#window-tools footer .btn {
+    padding: 1em 8em;
+}
+#window-tools footer .btn p {
+    font-size: 1.2em;
 }
 
 .dbg { border: 1px solid red; }
