@@ -180,53 +180,46 @@
                     <div id="window-settings" class="inactive">
                         <div class="tab-window">
                             <h1 class="win-header">Settings</h1>
-                            <div id="opts-stack" class="win-btn-stack" style="height: auto;">
+                            <section class="settings">
                                 <div class="option" id="opt-auto-cloak">
                                     <div class="label">
-                                        <h1 class="fnt-audiowide">Auto self-cloak on launch</h1>
+                                        <h1 class="win-header">Auto self-cloak on launch</h1>
                                         <input type="checkbox" onchange="updateOption('auto_cloak')">
                                     </div>
-                                    <h1 class="info win-subheader fnt-audiowide">(requires popups to be enabled)</h1>
+                                    <h1 class="win-subheader">(requires popups to be enabled)</h1>
                                 </div>
                                 <div class="option" id="opt-replace-original">
                                     <div class="label">
-                                        <h1 class="fnt-audiowide">Replace original tab</h1>
+                                        <h1 class="win-header">Replace original tab</h1>
                                         <input type="checkbox" onchange="updateOption('replace_original')">
                                     </div>
-                                    <h1 class="info win-subheader fnt-audiowide">(Do note that cloaked links will not
-                                        open in a new tab in cloaked form.)</h1>
+                                    <h1 class="win-subheader">(Do note that cloaked links will not open in a new tab in cloaked form.)</h1>
                                 </div>
                                 <div class="option" id="opt-show-home">
                                     <div class="label">
-                                        <h1 class="fnt-audiowide">Always show home button</h1>
+                                        <h1 class="win-header">Always show home button</h1>
                                         <input type="checkbox" onchange="updateOption('show_home')">
                                     </div>
-                                    <h1 class="info win-subheader fnt-audiowide">Reload to fix if broken.</h1>
+                                    <h1 class="win-subheader">(Reload to fix if broken)</h1>
                                 </div>
                                 <div class="option" id="opt-show-particles">
                                     <div class="label">
-                                        <h1 class="fnt-audiowide">Dynamic background (particles)</h1>
+                                        <h1 class="win-header">Dynamic background (particles)</h1>
                                         <input type="checkbox" onchange="updateOption('show_particles')">
                                     </div>
+                                    <h1 class="win-subheader">(Disabling this may improve performance)</h1>
                                 </div>
-                            </div>
-                            <div
-                                style="height: 8%; width: 100%; display: flex; justify-content: center; padding-top: 10px;">
-                                <button id="opt-reload" class="win-btn fnt-audiowide" onclick="location.reload()">
-                                    Reload
+                            </section>
+                            <button class="btn" onclick="location.reload()">
+                                <p>Reload</p>
+                            </button>
+                            <section class="suggestions">
+                                <h1 class="win-header">Suggestions</h1>
+                                <h2 class="win-subheader">Got suggestions for UGA? Fill out the form below.</h2>
+                                <button class="btn" onclick="openUrl('suggestions')">
+                                    <p>Open Form</p>
                                 </button>
-                            </div>
-                            <div style="flex-grow: 1;"></div>
-                            <div style="height: 30%; display: flex; flex-direction: column; align-items: center;">
-                                <h1 class="win-header fnt-audiowide" style="margin-bottom: 0px;">Suggestions</h1>
-                                <h1 class="win-subheader fnt-audiowide">
-                                    Got suggestions for UGA? Fill out the form below.
-                                </h1>
-                                <button id="opt-form" class="win-btn fnt-audiowide" style="width: 40%;"
-                                    onclick="openIframe('https://forms.office.com/r/Q1b91AwsJ1')">
-                                    Open Form
-                                </button>
-                            </div>
+                            </section>
                         </div>
                     </div>
                 </section>

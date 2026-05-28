@@ -6,7 +6,9 @@ const urls = {
     "selenite": "https://mail.adriapartners.net",
     "prism": "https://schoolclassroomcanvacanvacodecom.7879.22web.org/",
     "interstellar": "https://potato.wwe.ddnss.de",
-    "frogie": "https://mshjvxae.1vib36z.ddnss.de/"
+    "frogie": "https://mshjvxae.1vib36z.ddnss.de/",
+    
+    "suggestions": "https://forms.office.com/r/Q1b91AwsJ1"
 }
 
 let _activeWindow = "";

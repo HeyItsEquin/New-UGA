@@ -326,6 +326,76 @@
     align-items: center;
 }
 
+#window-settings .settings {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    gap: 1.5rem;
+    margin: 1rem 0rem 2rem 0rem;
+}
+
+#window-settings .option {
+    margin: 0;
+}
+#window-settings .option .label {
+    display: flex;
+    justify-content: center;
+}
+#window-settings .option .label h1 {
+    color: var(--clr-surface-light);
+    font-size: 0.9em;
+    font-weight: 400;
+    margin: 0px 20px 0px 0px;
+}
+#window-settings .option .label input {
+    accent-color: var(--clr-surface-1);
+    margin: 0;
+}
+#window-settings .option .win-subheader {
+    text-align: center;
+    margin: 0;
+}
+
+#window-settings .btn {
+    padding: 0.8rem 2rem;
+    box-shadow: none;
+    border: 1.5px solid var(--clr-surface-light);
+}
+#window-settings .btn p {
+    color: var(--clr-surface-light);
+    text-shadow: none;
+}
+
+#window-settings .suggestions {
+    margin-top: 2em;
+}
+
+#window-settings .suggestions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#window-settings .suggestions h1,
+#window-settings .suggestions h2 {
+    text-align: center;
+    margin: 0;
+}
+#window-settings .suggestions .btn {
+    margin-top: 1rem;
+}
+
+/* Make it look less cramped on shorter screens */
+@media (max-height: 800px) {
+    #window-settings .settings {
+        gap: 1rem;
+        margin: 0rem 0rem 1rem 0rem;
+    }
+
+    #window-settings .suggestions {
+        margin-top: 1.5rem;
+    }
+}
+
 .dbg { border: 1px solid red; }
 
 .fnt-audiowide {
