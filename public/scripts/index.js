@@ -354,6 +354,12 @@ function openCloaked(url) {
     // doc.body.appendChild(script);
 }
 
+function isIframeOpen() {
+    let iframe = document.querySelector("#content-presenter iframe");
+    if (!iframe || iframe.src != "") return false;
+    return true;
+}
+
 async function downloadFile(rp, use_direct = false) {
     let fp = _downloadDir + rp;
     let downloadUrl = "";
@@ -380,4 +386,12 @@ async function downloadFile(rp, use_direct = false) {
     updateWindows();
     applySettings();
     initSettingsApplied = true;
+    
+    window.addEventListener("beforeunload", (ev) => {
+        ev.preventDefault();
+        if (isIframeOpen()) {
+            ev.returnValue = '';
+            return '';
+        }
+    });
 })();

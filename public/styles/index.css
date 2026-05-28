@@ -429,6 +429,29 @@ body {
     }
 }
 
+
+#content-presenter {
+    overflow: hidden;
+    background-color: var(--clr-surface-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#content-presenter.hidden {
+    display: none;
+}
+
+#content-presenter iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
 .dbg { border: 1px solid red; }
 
 .fnt-audiowide {
@@ -707,18 +730,4 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-#content-presenter {
-    overflow-y: hidden;
-}
-#content-presenter.hidden {
-    display: none;
-}
-#content-presenter iframe {
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    border: none;
 }
