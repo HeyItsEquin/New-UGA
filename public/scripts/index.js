@@ -238,9 +238,11 @@ function toggleWindow(id, state) {
 
     if (state == true) {
         win.classList.remove("inactive");
+        win.classList.add("active");
         tab.classList.add("active");
     } else {
         win.classList.add("inactive");
+        win.classList.remove("active");
         tab.classList.remove("active");
     }
 }
