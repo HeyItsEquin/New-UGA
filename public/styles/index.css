@@ -12,6 +12,8 @@
     --clr-shadow-0: #15FF0097;
     --clr-shadow-1: #15FF004D;
 
+    --clr-seman-err: #FF0000;
+
     --clr-border-primary: #10B801;
 
     --font-primary: "Audiowide", "Segoe UI", Tahoma, sans-serif;
@@ -212,7 +214,6 @@ body {
 
 #section-downloads,
 #section-guides {
-    /* flex-grow: 1; */
     width: 50%;
     height: 100%;
     display: flex;
@@ -235,7 +236,6 @@ body {
 
 #section-downloads .downloads .btn {
     padding: 1em 8em;
-    min-width: 0;
 }
 #section-downloads .downloads .btn p {
     font-size: 1.2em;
@@ -286,16 +286,35 @@ body {
 #window-tools footer {
     width: 100%;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     margin-bottom: 3em;
 }
 #window-tools footer .btn {
-    padding: 1em 8em;
+    padding: 0em 1.5em;
+    box-shadow: none;
 }
 #window-tools footer .btn p {
-    font-size: 1.2em;
+    font-size: 1em;
 }
 
+#window-tools .err-display {
+    margin: 0;
+    color: var(--clr-seman-err);
+}
+#window-tools .err-display.hidden {
+    visibility: hidden;
+}
+#window-tools .cloak-input {
+    margin: 0.5rem;
+    background-color: var(--clr-surface-0);
+    border: 1px solid var(--clr-border-primary);
+    outline: none;
+    color: var(--clr-surface-light);
+    font-family: var(--font-primary);
+    font-size: 0.9em;
+}
 
 #window-info .tab-window {
     display: flex;

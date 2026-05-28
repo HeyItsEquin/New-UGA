@@ -267,8 +267,12 @@ function makeActive(winId) {
 }
 
 function cloaxerPrompt() {
-    let url = prompt("Enter URL to be cloaxed");
+    let input = document.querySelector("#window-tools .cloak-input");
+    if (!input || input.value.trim() == "") return;
+    let url = input.value;
+
     openCloaked(url);
+    input.value = "";
 }
 
 function cloakSelf() {
@@ -284,9 +288,11 @@ function cloakSelf() {
 function openCloaked(url) {
     if (!URL.canParse(url) || url == "https://null") {
         log(
-            "Improper URL. (ex: https://example.com, example.com)",
-            LogLevel.Error, true
+            "Improper URL. (ex: https://example.com)",
+            LogLevel.Error
         );
+        cloakError("Improper URL. (ex: https://example.com)");
+        return;
     }
 
     // Whether we're currently in an iframe
@@ -356,8 +362,20 @@ function openCloaked(url) {
 
 function isIframeOpen() {
     let iframe = document.querySelector("#content-presenter iframe");
-    if (!iframe || iframe.src != "") return false;
+    if (!iframe || iframe.src.trim() == "") return false;
     return true;
+}
+
+function cloakError(msg) {
+    let display = document.querySelector("#window-tools .err-display");
+    if (!display) return;
+
+    display.classList.remove("hidden");
+    display.textContent = msg;
+    setTimeout(() => {
+        if (display)
+            display.classList.add("hidden");
+    }, 2000);
 }
 
 async function downloadFile(rp, use_direct = false) {
@@ -388,10 +406,19 @@ async function downloadFile(rp, use_direct = false) {
     initSettingsApplied = true;
     
     window.addEventListener("beforeunload", (ev) => {
-        ev.preventDefault();
         if (isIframeOpen()) {
+            ev.preventDefault();
             ev.returnValue = '';
             return '';
         }
     });
+
+    let cloakInput = document.querySelector("#window-tools .cloak-input");
+    if (cloakInput) {
+        cloakInput.addEventListener("keyup", (ev) => {
+            ev.preventDefault();
+            if (ev.key == "Enter")
+                cloaxerPrompt();
+        });
+    }
 })();
