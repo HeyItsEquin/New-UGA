@@ -262,6 +262,62 @@
     font-size: 1.2em;
 }
 
+
+#window-info .tab-window {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#window-info section .win-header,
+#window-info section .win-subheader {
+    text-align: center;
+}
+#window-info section h2.win-header {
+    font-size: 0.9em;
+}
+#window-info section a {
+    color: inherit;
+}
+
+#window-info section.changelog {
+    min-width: 0;
+    margin-top: 2em;
+    padding: 0em 10em 2em 10em;
+    width: 100%;
+    flex-grow: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+#window-info section.changelog h1.win-header {
+    margin-bottom: 0;
+}
+#window-info section.changelog h2.win-subheader {
+    margin-top: 0;
+}
+#window-info section.changelog article {
+    flex-grow: 1;
+    border: 1.5px solid var(--clr-border-primary);
+    background-color: rgba(73, 73, 73, 0.3);
+    color: var(--clr-surface-light);
+    font-size: 0.8em;
+    font-family: var(--font-primary);
+    padding-left: 1em;
+    overflow-y: auto;
+    scrollbar-color: #888 transparent;
+}
+.changelog article h2 {
+    margin-bottom: 0.5em;
+}
+.changelog article ul {
+    margin-top: 0;
+}
+.changelog article li::marker {
+    content: "- ";
+}
+
 .dbg { border: 1px solid red; }
 
 .fnt-audiowide {
