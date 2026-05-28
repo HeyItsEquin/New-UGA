@@ -143,6 +143,8 @@ def write_output(out: str, ld_out: str, sf_out: str, github_url: Optional[str], 
         try:
             with open(jsd_purge, "w") as r:
                 r.write('\n'.join(_cdn_links))
+                if github_url:
+                    r.write(f'\n{jsdelivr_url(github_url, out)}')
         except Exception as e:
             log(LogLevel.Error, f"Failed to write purge URLs {color(str(jsd_rel), ColorCode.GRAY)}: {e}")
 
