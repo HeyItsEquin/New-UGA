@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <!-- Prevent browser caching -->
+        <meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+        <meta content="no-cache" http-equiv="Pragma"/>
+        <meta content="0" http-equiv="Expires"/>
+        <title>
+            New Tab
+        </title>
+        <link href="https://fonts.googleapis.com" rel="preconnect"/>
+        <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+        <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet"/>
+        <link href="https://cdn.jsdelivr.net/gh/HeyItsEquin/New-UGA@main/public/styles/index.css" rel="stylesheet" type="text/css"/>
+        <style>
+        </style>
+    </head>
+    <body style="margin: 0px; padding: 0px;">
+        <div class="fill-screen" id="background">
+            <div class="fill-parent" id="particles-js">
+            </div>
+        </div>
+        <div class="fill-screen" id="page-content">
+            <header id="content-top">
+                <div class="stack-grid">
+                    <p id="current-time">
+                        5/15/26
+                    </p>
+                    <div class="hide" id="esc-wrapper">
+                        <div id="esc-buttons">
+                            <div id="esc-region">
+                                <button id="esc-btn" onclick="closeIframe()">
+                                    <p>
+                                        Home
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <main id="content-main">
+                <div id="main-stack">
+                    <section class="centered" id="title-wrapper">
+                        <div id="page-title">
+                            <h1>
+                                UGA
+                            </h1>
+                            <p id="splash-text">
+                                new update every monday
+                            </p>
+                        </div>
+                    </section>
+                    <section class="centered" id="content-windows">
+                        <div class="inactive" id="window-ga-prox">
+                            <div class="window-bound">
+                                <div class="tab-window">
+                                    <h1 class="win-header">
+                                        Gąmes / Pröxies
+                                    </h1>
+                                    <div class="ga-prox-btns">
+                                        <div class="left">
+                                            <button class="btn" onclick="openUrl('selenite')">
+                                                <p>
+                                                    Selenite
+                                                </p>
+                                            </button>
+                                            <button class="btn" onclick="openUrl('prism')">
+                                                <p>
+                                                    Vapor (Prism)
+                                                </p>
+                                            </button>
+                                        </div>
+                                        <svg class="separator">
+                                            <line x1="50%" x2="50%" y1="0%" y2="100%">
+                                            </line>
+                                        </svg>
+                                        <div class="right">
+                                            <button class="btn" onclick="openUrl('interstellar')">
+                                                <p>
+                                                    Interstellar
+                                                </p>
+                                            </button>
+                                            <button class="btn" onclick="openUrl('frogie')">
+                                                <p>
+                                                    Frogie's Arcade
+                                                </p>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <h1 class="win-subheader">
+                                        Broken? Try something else or check out Downloads.
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inactive" id="window-downloads">
+                            <div class="window-bound">
+                                <div class="tab-window">
+                                    <div id="section-downloads">
+                                        <h1 class="win-header">
+                                            Downloads
+                                        </h1>
+                                        <div class="downloads">
+                                            <button class="btn" onclick="downloadFile('gnmath/singlefile.html')">
+                                                <p>
+                                                    gn-math
+                                                </p>
+                                            </button>
+                                            <div class="has-label">
+                                                <button class="btn" onclick="downloadFile('BSS/BSS.zip')">
+                                                    <p>
+                                                        Bee Swarm Simulator
+                                                    </p>
+                                                </button>
+                                                <p class="anchor">
+                                                    (Unzip and run index.html)
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="section-guides">
+                                        <h1 class="win-header">
+                                            Guides
+                                        </h1>
+                                        <p class="win-subheader">
+                                            (Probably) Coming Soon
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inactive" id="window-tools">
+                            <div class="window-bound">
+                                <div class="tab-window">
+                                    <h1 class="win-subheader">
+                                        All we have is cloaxer rn
+                                    </h1>
+                                    <section>
+                                        <h1 class="win-header">
+                                            Cloaxer
+                                        </h1>
+                                        <p class="win-subheader">
+                                            Cloaxer is for about:blank cloaking tabs.
+                                            <br/>
+                                            This makes them harder to be dyknow(ed) and blocked.
+                                        It works on almost everything but products from big companies (Google, Microsoft,
+                                        etc.)
+                                            <br/>
+                                            Instructions: Enter your link below and press enter or click "Cloak"
+                                        </p>
+                                    </section>
+                                    <footer>
+                                        <h1 class="err-display win-subheader hidden">
+                                            ?ErrorMessage?
+                                        </h1>
+                                        <input class="cloak-input" placeholder=" Enter URL..." type="text"/>
+                                        <button class="btn" onclick="cloaxerPrompt()">
+                                            <p>
+                                                Cloak
+                                            </p>
+                                        </button>
+                                    </footer>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inactive" id="window-info">
+                            <div class="window-bound">
+                                <div class="tab-window">
+                                    <section class="info">
+                                        <h1 class="win-header">
+                                            Info
+                                        </h1>
+                                        <h2 class="win-header">
+                                            v1.1 - 5/11/2026
+                                        </h2>
+                                        <h2 class="win-header">
+                                            Made by
+                                            <a href="https://github.com/ddddd-dbase">
+                                                ddddd-dbase
+                                            </a>
+                                            (UGA dev 2)
+                                        </h2>
+                                        <h2 class="win-header">
+                                            Email:
+                                            <a href="mailto:loverofelpotatos@gmail.com">
+                                                loverofelpotatos@gmail.com
+                                            </a>
+                                        </h2>
+                                        <h2 class="win-header">
+                                            No AI used! :D
+                                        </h2>
+                                    </section>
+                                    <section class="changelog">
+                                        <h1 class="win-header">
+                                            Changelog
+                                        </h1>
+                                        <h2 class="win-subheader">
+                                            Link fixes will not be included
+                                            <article>
+                                                <h2>
+                                                    v1.1 - 5/11/2026
+                                                </h2>
+                                                <ul>
+                                                    <li>
+                                                        Particles.js background + toggle for it
+                                                    </li>
+                                                    <li>
+                                                        A bit more info in random places
+                                                    </li>
+                                                    <li>
+                                                        Bee Swarm Simulator downloadable
+                                                    </li>
+                                                    <li>
+                                                        Renamed "Cloaxer" tab to "Tools"
+                                                    </li>
+                                                    <li>
+                                                        You can now click outside tabs to close them (not just clicking on the
+                                                    tab again)
+                                                    </li>
+                                                    <li>
+                                                        Time display
+                                                    </li>
+                                                    <li>
+                                                        Hide home button toggle
+                                                    </li>
+                                                    <li>
+                                                        Moved settings and suggestions into its own tab
+                                                    </li>
+                                                    <li>
+                                                        Minor design changes
+                                                    </li>
+                                                </ul>
+                                                <h2>
+                                                    v1.0.1 - 5/5/2026
+                                                </h2>
+                                                <ul>
+                                                    <li>
+                                                        Added more info in various places
+                                                    </li>
+                                                    <li>
+                                                        Fixed home button
+                                                    </li>
+                                                </ul>
+                                                <h2>
+                                                    v1.0 - 5/4/2026
+                                                </h2>
+                                                <ul>
+                                                    <li>
+                                                        Completely revamped UI
+                                                    </li>
+                                                    <li>
+                                                        Update warning added
+                                                    </li>
+                                                    <li>
+                                                        Changelog added
+                                                    </li>
+                                                    <li>
+                                                        Fixed nothing
+                                                    </li>
+                                                </ul>
+                                                <h2>
+                                                    v0.2 - 4/27/2026
+                                                </h2>
+                                                <ul>
+                                                    <li>
+                                                        Coming soon added
+                                                    </li>
+                                                    <li>
+                                                        Guides (coming soon) added
+                                                    </li>
+                                                    <li>
+                                                        Splash texts added
+                                                    </li>
+                                                    <li>
+                                                        Downloads added
+                                                    </li>
+                                                    <li>
+                                                        Fixed font size on smaller screens
+                                                    </li>
+                                                </ul>
+                                                <h2>
+                                                    v0.1 - 4/20/2026
+                                                </h2>
+                                                <ul>
+                                                    <li>
+                                                        First version :O
+                                                    </li>
+                                                </ul>
+                                            </article>
+                                        </h2>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inactive" id="window-settings">
+                            <div class="window-bound">
+                                <div class="tab-window">
+                                    <h1 class="win-header">
+                                        Settings
+                                    </h1>
+                                    <section class="settings">
+                                        <div class="option" id="opt-auto-cloak">
+                                            <div class="label">
+                                                <h1 class="win-header">
+                                                    Auto self-cloak on launch
+                                                </h1>
+                                                <input onchange="updateOption('auto_cloak')" type="checkbox"/>
+                                            </div>
+                                            <h1 class="win-subheader">
+                                                (requires popups to be enabled)
+                                            </h1>
+                                        </div>
+                                        <div class="option" id="opt-replace-original">
+                                            <div class="label">
+                                                <h1 class="win-header">
+                                                    Replace original tab
+                                                </h1>
+                                                <input onchange="updateOption('replace_original')" type="checkbox"/>
+                                            </div>
+                                            <h1 class="win-subheader">
+                                                (Do note that cloaked links will not open in a new tab in
+                                            cloaked form.)
+                                            </h1>
+                                        </div>
+                                        <div class="option" id="opt-show-home">
+                                            <div class="label">
+                                                <h1 class="win-header">
+                                                    Always show home button
+                                                </h1>
+                                                <input onchange="updateOption('show_home')" type="checkbox"/>
+                                            </div>
+                                            <h1 class="win-subheader">
+                                                (Reload to fix if broken)
+                                            </h1>
+                                        </div>
+                                        <div class="option" id="opt-show-particles">
+                                            <div class="label">
+                                                <h1 class="win-header">
+                                                    Dynamic background (particles)
+                                                </h1>
+                                                <input onchange="updateOption('show_particles')" type="checkbox"/>
+                                            </div>
+                                            <h1 class="win-subheader">
+                                                (Disabling this may improve performance)
+                                            </h1>
+                                        </div>
+                                    </section>
+                                    <button class="btn" onclick="location.reload()">
+                                        <p>
+                                            Reload
+                                        </p>
+                                    </button>
+                                    <section class="suggestions">
+                                        <h1 class="win-header">
+                                            Suggestions
+                                        </h1>
+                                        <h2 class="win-subheader">
+                                            Got suggestions for UGA? Fill out the form below.
+                                        </h2>
+                                        <button class="btn" onclick="openUrl('suggestions')">
+                                            <p>
+                                                Open Form
+                                            </p>
+                                        </button>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+            <footer id="content-bottom">
+                <div id="tab-buttons">
+                    <div class="tab-btn-grid">
+                        <div class="btn" id="tab-ga-prox" onclick="makeActive('ga-prox')">
+                            <p>
+                                Gąmes / Pröxies
+                            </p>
+                        </div>
+                        <div class="btn" id="tab-downloads" onclick="makeActive('downloads')">
+                            <p>
+                                Downloads / Guides
+                            </p>
+                        </div>
+                        <div class="btn" id="tab-tools" onclick="makeActive('tools')">
+                            <p>
+                                Tools
+                            </p>
+                        </div>
+                        <div class="btn" id="tab-info" onclick="makeActive('info')">
+                            <p>
+                                Info
+                            </p>
+                        </div>
+                        <div class="btn" id="tab-settings" onclick="makeActive('settings')">
+                            <p>
+                                Settings
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <div class="fill-screen hidden" id="content-presenter">
+            <h1 class="win-header">
+                Loading...
+            </h1>
+            <iframe>
+            </iframe>
+        </div>
+        <!-- Load particles.js -->
+        <script defer src="https://cdn.jsdelivr.net/gh/HeyItsEquin/New-UGA@main/public/scripts/vendor/particles.min.js">
+        </script>
+        <script defer src="https://cdn.jsdelivr.net/gh/HeyItsEquin/New-UGA@main/public/scripts/particles.loader.js">
+        </script>
+        <script defer src="https://cdn.jsdelivr.net/gh/HeyItsEquin/New-UGA@main/public/scripts/index.js">
+        </script>
+    </body>
+</html>

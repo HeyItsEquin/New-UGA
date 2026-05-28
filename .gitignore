@@ -1,5 +1,4 @@
 *.jsdelivr.purge
 
 # Build files
-dist/
-*index.min.html
+*UGA.html
