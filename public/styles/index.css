@@ -103,7 +103,7 @@
     align-self: flex-start;
 }
 
-#content-windows [id*="window-"] {
+#content-windows [id^="window-"] {
     width: 100%;
     height: 100%;
 }
@@ -147,6 +147,17 @@
     flex: 1;
 }
 
+/* Make it look better on larger screens */
+@media (min-width: 1400px) {
+    .ga-prox-btns div {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .ga-prox-btns .right {
+        direction: rtl;
+    }
+}
+
 .ga-prox-btns .btn {
     text-align: center;
     padding: 0.8em 2em;
@@ -160,7 +171,6 @@
     stroke: var(--clr-border-primary);
     stroke-width: 2;
 }
-
 
 #window-downloads .tab-window {
     display: flex;
