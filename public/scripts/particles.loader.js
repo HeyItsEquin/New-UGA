@@ -53,7 +53,7 @@ particlesJS("particles-js", {
         onclick: {
           enable: true,
           mode: "push", // "push" or "remove"
-          nb: 6,
+          nb: 3,
         },
         onresize: {
           enable: true,
