@@ -1,6 +1,7 @@
 :root {
     --clr-surface-light: #FFFFFF;
     --clr-surface-dark: #000000;
+    --clr-surface-gray: #909090;
 
     --clr-surface-0: #000000CC;
     --clr-surface-1: #323232;
@@ -541,6 +542,8 @@ body {
 #window-settings .option .win-subheader {
     text-align: center;
     margin: 0;
+    color: var(--clr-surface-gray);
+    text-shadow: none;
 }
 
 #window-settings .btn {
