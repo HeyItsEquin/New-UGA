@@ -1,5 +1,10 @@
 const windowIds = [
-    "ga-prox", "downloads", "tools", "info", "settings"
+    "ga-prox",
+    "downloads",
+    "tools",
+    "bookmarklets",
+    "info",
+    "settings"
 ];
 
 const urls = {
