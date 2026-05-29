@@ -14,7 +14,17 @@ const urls = {
     "frogie": "https://mshjvxae.1vib36z.ddnss.de/",
     
     "suggestions": "https://forms.office.com/r/Q1b91AwsJ1"
-}
+};
+
+const splashTexts = [
+    "Uga Booga.",
+    ":D",
+    "Welcome to Stop Codon Gąmes!",
+    "Actually, we're the University of Georgia.",
+    "New update every Monday.",
+    "I have a normal amount of hours in Cookie Clicker. (trust)",
+    "Free candy in settings*",
+];
 
 let _activeWindow = "";
 
@@ -50,6 +60,10 @@ function log(msg, lvl = 0, display = false) {
 
 const _downloadDir = "downloads/";
 const GithubUrl = "HeyItsEquin/New-UGA";
+
+function choose(arr) {
+    return arr[Math.floor(Math.random()*arr.length)];
+}
 
 // Small helper fn
 String.prototype.removePrefix = function (s) {
@@ -449,7 +463,6 @@ async function downloadFile(rp, use_direct = false) {
         if (!inCurrentWindow(ev.x, ev.y))
             makeActive("");
     })
-
     window.addEventListener("beforeunload", (ev) => {
         if (isIframeOpen()) {
             ev.preventDefault();
@@ -465,5 +478,10 @@ async function downloadFile(rp, use_direct = false) {
             if (ev.key == "Enter")
                 cloaxerPrompt();
         });
+    }
+
+    let splashText = document.getElementById("splash-text");
+    if (splashText) {
+        splashText.textContent = choose(splashTexts);
     }
 })();
