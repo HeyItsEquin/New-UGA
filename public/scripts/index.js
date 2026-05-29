@@ -378,6 +378,38 @@ function cloakError(msg) {
     }, 2000);
 }
 
+function inRect(x, y, rect) {
+    return (
+        x >= rect.left &&
+        x <= rect.right &&
+        y >= rect.top && 
+        y <= rect.bottom
+    );
+}
+
+function inCurrentWindow(x, y) {
+    let active = getActiveWindow();
+    if (!active || active.trim() == "") return true;
+
+    let win = document.getElementById(`window-${active}`);
+    if (!win) return true;
+    let bound = win.querySelector(".window-bound");
+    let tab = document.getElementById(`tab-${active}`);
+    if (!bound || !tab) return true;
+    
+
+    let winBox = bound.getBoundingClientRect();
+    let tabBox = tab.getBoundingClientRect();
+    
+    return inRect(x,y, winBox) ||
+           inRect(x,y, tabBox);
+}
+
+function isWindowOpen() {
+    let current = getActiveWindow();
+    return !(current.trim() == "");
+}
+
 async function downloadFile(rp, use_direct = false) {
     let fp = _downloadDir + rp;
     let downloadUrl = "";
@@ -405,6 +437,14 @@ async function downloadFile(rp, use_direct = false) {
     applySettings();
     initSettingsApplied = true;
     
+    window.addEventListener("click", (ev) => {
+        if (!isWindowOpen())
+            return;
+
+        if (!inCurrentWindow(ev.x, ev.y))
+            makeActive("");
+    })
+
     window.addEventListener("beforeunload", (ev) => {
         if (isIframeOpen()) {
             ev.preventDefault();
