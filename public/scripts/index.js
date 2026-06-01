@@ -137,7 +137,6 @@ function updateOptionElements() {
 
         if (!Object.hasOwn(settings, option)) continue;
 
-        // All settings are boolean options for now so this is fine
         check.checked = settings[option];
     }
 }
@@ -412,7 +411,7 @@ function inCurrentWindow(x, y) {
 
     let win = document.getElementById(`window-${active}`);
     if (!win) return true;
-    let bound = win.querySelector(".window-bound");
+    let bound = win.querySelector(".tab-window");
     let tab = document.getElementById(`tab-${active}`);
     if (!bound || !tab) return true;
     
